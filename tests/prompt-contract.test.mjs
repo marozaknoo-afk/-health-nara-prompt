@@ -87,10 +87,10 @@ test("dashboard content type follows an executive KPI decision model", () => {
   assert.match(guidance.constraints, /Do not rely on color alone/);
 });
 
-test("Master Prompt always includes the mandatory Thai quality directive", () => {
+test("Master Prompt always includes the mandatory English quality directive", () => {
   assert.match(
     script,
-    /องค์ประกอบสมดุล ภาพคมชัด แสงเงาสมจริง ตัวหนังสือภาษาไทยถูกต้อง อ่านง่าย ไม่เพิ่มคำโปรยหรือข้อความอื่น ไม่เปลี่ยนใบหน้า ไม่บิดเบือนเครื่องแบบ ไม่มีลายน้ำ ไม่มีบุคคลซ้ำ ไม่มีมือหรือนิ้วผิดรูป ตัวอักษรภาษาไทยคมชัด อ่านง่าย สะกดถูกต้อง หลีกเลี่ยงข้อความซ้ำและตัวอักษรผิดเพี้ยน/,
+    /Balanced composition, sharp imagery, realistic lighting and shadows, and correct, legible Thai text\. Do not add taglines or any other text\. Do not alter faces\. Do not distort uniforms\. No watermarks\. No duplicate people\. No malformed hands or fingers\. Thai typography must be crisp, legible, and correctly spelled\. Avoid repeated text and distorted characters\./,
   );
   assert.match(
     script,
@@ -124,29 +124,38 @@ test("Master Prompt includes every requested visual quality and negative rule", 
     "Print Ready",
   ];
   const negativeRules = [
-    "Negative Prompt / หลีกเลี่ยง:",
-    "ห้ามตัวอักษรภาษาไทยผิดเพี้ยน",
-    "ห้ามสะกดผิด",
-    "ห้ามวรรณยุกต์หาย",
-    "ห้ามสระหาย",
-    "ห้ามตัวอักษรแตก",
-    "ห้ามตัวอักษรฟุ้งกระจาย",
-    "ห้ามข้อความอ่านไม่ออก",
-    "ห้ามใช้ข้อความย่อหน้ายาว",
-    "ห้ามเพิ่มคำคม",
-    "ห้ามเพิ่มคำขวัญ",
-    "ห้ามเพิ่มข้อมูลที่ไม่มีในโจทย์",
-    "ห้ามใช้ภาพแฟชั่น ไอดอล หรือบุคคลที่ไม่เกี่ยวข้อง",
-    "ห้ามใช้โทนภาพหวานเกินไปจนไม่เป็นทางการ",
-    "ห้ามใช้สีมากเกินไป",
-    "ห้ามให้แผนที่ทับกราฟ",
-    "ห้ามให้กราฟทับข้อความ",
-    "ห้ามวางองค์ประกอบรก",
-    "ห้ามใช้ไอคอนคุณภาพต่ำ",
-    "ห้ามใช้แสง Lens Flare มากเกินไป",
-    "ห้ามทำให้ข้อมูลสำคัญอ่านยาก",
+    "Negative Prompt / Avoid:",
+    "Do not distort Thai characters.",
+    "Do not misspell words.",
+    "Do not omit tone marks.",
+    "Do not omit vowels.",
+    "Do not render broken characters.",
+    "Do not scatter or fragment text.",
+    "Do not render unreadable text.",
+    "Do not use long paragraph text.",
+    "Do not add quotations.",
+    "Do not add slogans.",
+    "Do not add information not supplied in the brief.",
+    "Do not use fashion imagery, idols, or unrelated people.",
+    "Do not use an overly sweet visual tone that feels unofficial.",
+    "Do not use too many colors.",
+    "Do not let maps overlap charts.",
+    "Do not let charts overlap text.",
+    "Do not create cluttered compositions.",
+    "Do not use low-quality icons.",
+    "Do not overuse lens flare.",
+    "Do not make important information difficult to read.",
   ];
   for (const rule of [...visualQualityRules, ...negativeRules]) {
     assert.ok(script.includes(rule), `missing prompt rule: ${rule}`);
   }
+});
+
+test("system-authored Master Prompt instructions contain no Thai text", () => {
+  const negativeStart = script.indexOf("const NEGATIVE_PROMPT_BLOCK");
+  const negativeEnd = script.indexOf("const POPULAR", negativeStart);
+  const buildStart = script.indexOf("function buildPrompt");
+  const buildEnd = script.indexOf("function renderPrompt", buildStart);
+  assert.doesNotMatch(script.slice(negativeStart, negativeEnd), /[ก-๙]/);
+  assert.doesNotMatch(script.slice(buildStart, buildEnd), /[ก-๙]/);
 });
