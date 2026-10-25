@@ -462,6 +462,51 @@
     "Metallic Gold Reflection", "Sharp Focus", "High-end Editorial Design",
   ];
 
+  const VISUAL_QUALITY_BLOCK = `Visual Quality:
+Ultra Realistic
+Highly Detailed
+8K Quality
+Premium Government Banner
+Modern Healthcare Dashboard
+Luxury Blue Gold Theme
+Clean Professional Design
+Sharp Typography
+Perfect Alignment
+Symmetrical Layout
+Balanced Composition
+HDR Lighting
+Cinematic Depth of Field
+Realistic Light and Shadow Rendering
+Professional Photoshop Composite
+3D Data Visualization
+Glassmorphism Dashboard
+High Contrast
+Editorial Quality
+No AI Generated Look
+Print Ready`;
+
+  const NEGATIVE_PROMPT_BLOCK = `Negative Prompt / หลีกเลี่ยง:
+ห้ามตัวอักษรภาษาไทยผิดเพี้ยน
+ห้ามสะกดผิด
+ห้ามวรรณยุกต์หาย
+ห้ามสระหาย
+ห้ามตัวอักษรแตก
+ห้ามตัวอักษรฟุ้งกระจาย
+ห้ามข้อความอ่านไม่ออก
+ห้ามใช้ข้อความย่อหน้ายาว
+ห้ามเพิ่มคำคม
+ห้ามเพิ่มคำขวัญ
+ห้ามเพิ่มข้อมูลที่ไม่มีในโจทย์
+ห้ามใช้ภาพแฟชั่น ไอดอล หรือบุคคลที่ไม่เกี่ยวข้อง
+ห้ามใช้โทนภาพหวานเกินไปจนไม่เป็นทางการ
+ห้ามใช้สีมากเกินไป
+ห้ามให้แผนที่ทับกราฟ
+ห้ามให้กราฟทับข้อความ
+ห้ามวางองค์ประกอบรก
+ห้ามใช้ไอคอนคุณภาพต่ำ
+ห้ามใช้แสง Lens Flare มากเกินไป
+ห้ามทำให้ข้อมูลสำคัญอ่านยาก`;
+
   const POPULAR = ["Luxury Emerald & Gold", "Medical Blue", "Royal Navy & Gold", "Violet AI"];
 
   const TONE_ROLES = ["primary", "secondary", "tertiary", "metallic"];
@@ -848,6 +893,10 @@ Style Standards: ${STYLE_TAGS.join(" / ")}.
 Mandatory Quality Directive:
 องค์ประกอบสมดุล ภาพคมชัด แสงเงาสมจริง ตัวหนังสือภาษาไทยถูกต้อง อ่านง่าย ไม่เพิ่มคำโปรยหรือข้อความอื่น ไม่เปลี่ยนใบหน้า ไม่บิดเบือนเครื่องแบบ ไม่มีลายน้ำ ไม่มีบุคคลซ้ำ ไม่มีมือหรือนิ้วผิดรูป ตัวอักษรภาษาไทยคมชัด อ่านง่าย สะกดถูกต้อง หลีกเลี่ยงข้อความซ้ำและตัวอักษรผิดเพี้ยน
 Professional Print Quality / Luxury Government Report / Realistic Skin Texture  / Sharp Focus / High-end Editorial Design
+
+${VISUAL_QUALITY_BLOCK}
+
+${NEGATIVE_PROMPT_BLOCK}
 
 [07] OUTPUT SPECIFICATIONS
 ASPECT RATIO: ${state.aspectRatio}.

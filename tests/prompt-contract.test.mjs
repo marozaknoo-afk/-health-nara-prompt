@@ -97,3 +97,56 @@ test("Master Prompt always includes the mandatory Thai quality directive", () =>
     /Professional Print Quality \/ Luxury Government Report \/ Realistic Skin Texture  \/ Sharp Focus \/ High-end Editorial Design/,
   );
 });
+
+test("Master Prompt includes every requested visual quality and negative rule", () => {
+  const visualQualityRules = [
+    "Visual Quality:",
+    "Ultra Realistic",
+    "Highly Detailed",
+    "8K Quality",
+    "Premium Government Banner",
+    "Modern Healthcare Dashboard",
+    "Luxury Blue Gold Theme",
+    "Clean Professional Design",
+    "Sharp Typography",
+    "Perfect Alignment",
+    "Symmetrical Layout",
+    "Balanced Composition",
+    "HDR Lighting",
+    "Cinematic Depth of Field",
+    "Realistic Light and Shadow Rendering",
+    "Professional Photoshop Composite",
+    "3D Data Visualization",
+    "Glassmorphism Dashboard",
+    "High Contrast",
+    "Editorial Quality",
+    "No AI Generated Look",
+    "Print Ready",
+  ];
+  const negativeRules = [
+    "Negative Prompt / หลีกเลี่ยง:",
+    "ห้ามตัวอักษรภาษาไทยผิดเพี้ยน",
+    "ห้ามสะกดผิด",
+    "ห้ามวรรณยุกต์หาย",
+    "ห้ามสระหาย",
+    "ห้ามตัวอักษรแตก",
+    "ห้ามตัวอักษรฟุ้งกระจาย",
+    "ห้ามข้อความอ่านไม่ออก",
+    "ห้ามใช้ข้อความย่อหน้ายาว",
+    "ห้ามเพิ่มคำคม",
+    "ห้ามเพิ่มคำขวัญ",
+    "ห้ามเพิ่มข้อมูลที่ไม่มีในโจทย์",
+    "ห้ามใช้ภาพแฟชั่น ไอดอล หรือบุคคลที่ไม่เกี่ยวข้อง",
+    "ห้ามใช้โทนภาพหวานเกินไปจนไม่เป็นทางการ",
+    "ห้ามใช้สีมากเกินไป",
+    "ห้ามให้แผนที่ทับกราฟ",
+    "ห้ามให้กราฟทับข้อความ",
+    "ห้ามวางองค์ประกอบรก",
+    "ห้ามใช้ไอคอนคุณภาพต่ำ",
+    "ห้ามใช้แสง Lens Flare มากเกินไป",
+    "ห้ามทำให้ข้อมูลสำคัญอ่านยาก",
+  ];
+  for (const rule of [...visualQualityRules, ...negativeRules]) {
+    assert.ok(script.includes(rule), `missing prompt rule: ${rule}`);
+  }
+});
