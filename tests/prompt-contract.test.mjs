@@ -93,7 +93,7 @@ test("Master Prompt emits one consolidated quality block and one negative block"
   const buildStart = script.indexOf("function buildPrompt");
   const buildEnd = script.indexOf("function renderPrompt", buildStart);
   const buildFunction = script.slice(buildStart, buildEnd);
-  assert.equal(buildFunction.split("${VISUAL_QUALITY_BLOCK}").length - 1, 1);
+  assert.equal(buildFunction.split("${visualQualityBlock}").length - 1, 1);
   assert.equal(buildFunction.split("${NEGATIVE_PROMPT_BLOCK}").length - 1, 1);
   assert.doesNotMatch(buildFunction, /Style Standards:/);
   assert.doesNotMatch(buildFunction, /Mandatory Quality Directive:/);
@@ -190,4 +190,18 @@ test("responsive CSS covers narrow screens, safe areas, and touch targets", () =
   assert.match(styles, /@media \(pointer: coarse\)/);
   assert.match(styles, /min-height: 44px/);
   assert.match(styles, /minmax\(min\(220px, 100%\), 1fr\)/);
+});
+
+test("source-authentic colors are the default and migrate saved palette state", () => {
+  assert.match(index, /id="sourceColorModeBtn"/);
+  assert.match(index, /ไม่เลือกตามหมวดหมู่สี/);
+  assert.match(script, /const STATE_VERSION = 2/);
+  assert.match(script, /paletteId: SOURCE_COLOR_MODE_ID/);
+  assert.match(script, /saved\.paletteId = SOURCE_COLOR_MODE_ID/);
+  assert.match(script, /COLOR MODE: SOURCE-AUTHENTIC COLORS \(DEFAULT\)/);
+  assert.match(script, /do not apply a preset palette/i);
+  assert.match(script, /Preserve natural skin tones, object colors, character colors, uniforms, logos, maps, charts, and environmental colors/);
+  assert.match(script, /sourceColorMode \? "Source-Authentic Color Fidelity" : paletteQualityLabel/);
+  assert.match(script, /Selected Palette Fidelity/);
+  assert.match(script, /--hp-color-mode: source-authentic/);
 });

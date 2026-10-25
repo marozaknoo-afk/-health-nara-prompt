@@ -21,6 +21,21 @@
     buildIslamicArtStyleGuidance,
   } = globalThis.HealthPromptIslamicArtStyles;
 
+  const STATE_VERSION = 2;
+  const SOURCE_COLOR_MODE_ID = "source-authentic-colors";
+  const SOURCE_COLOR_MODE = Object.freeze({
+    id: SOURCE_COLOR_MODE_ID,
+    name: "Source-Authentic Colors",
+    category: "No Preset Palette",
+    colors: Object.freeze({
+      primary: "#2563eb",
+      secondary: "#1e3a8a",
+      tertiary: "#06b6d4",
+      metallic: "#a78bfa",
+      bg: "#eff6ff",
+    }),
+  });
+
   const PALETTES = [
     { id: "medical-blue", name: "Medical Blue", category: "Healthcare",
       colors: { primary: "#1d4ed8", secondary: "#1e3a8a", tertiary: "#60a5fa", metallic: "#93c5fd", bg: "#f5f8ff" } },
@@ -509,6 +524,7 @@ Print Ready at Professional Print Quality`;
     pills: document.getElementById("pills"),
     resCount: document.getElementById("resCount"),
     grid: document.getElementById("paletteGrid"),
+    sourceColorModeBtn: document.getElementById("sourceColorModeBtn"),
     toneRamp: document.getElementById("toneRamp"),
     toneRampPaletteName: document.getElementById("toneRampPaletteName"),
     content: document.getElementById("contentInput"),
@@ -542,7 +558,8 @@ Print Ready at Professional Print Quality`;
   };
 
   let state = {
-    paletteId: "luxury-emerald-gold",
+    stateVersion: STATE_VERSION,
+    paletteId: SOURCE_COLOR_MODE_ID,
     category: "All",
     query: "",
     content: "",
@@ -559,18 +576,32 @@ Print Ready at Professional Print Quality`;
   function loadState() {
     try {
       const saved = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+      if (saved.stateVersion !== STATE_VERSION) {
+        saved.stateVersion = STATE_VERSION;
+        saved.paletteId = SOURCE_COLOR_MODE_ID;
+        saved.toneIndex = null;
+      }
       state = { ...state, ...saved };
     } catch (_) { /* ignore corrupt storage */ }
     state.contentType = normalizeContentType(state.contentType);
     state.aspectRatio = normalizeAspectRatio(state.aspectRatio);
+    if (state.paletteId !== SOURCE_COLOR_MODE_ID && !PALETTES.some((p) => p.id === state.paletteId)) {
+      state.paletteId = SOURCE_COLOR_MODE_ID;
+      state.toneIndex = null;
+    }
   }
 
   function saveState() {
     try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (_) { /* storage unavailable */ }
   }
 
+  function isSourceColorMode() {
+    return state.paletteId === SOURCE_COLOR_MODE_ID;
+  }
+
   function getPalette() {
-    return PALETTES.find((p) => p.id === state.paletteId) || PALETTES[0];
+    if (isSourceColorMode()) return SOURCE_COLOR_MODE;
+    return PALETTES.find((p) => p.id === state.paletteId) || SOURCE_COLOR_MODE;
   }
 
   function categories() {
@@ -597,6 +628,21 @@ Print Ready at Professional Print Quality`;
     renderPills();
     renderGrid();
     saveState();
+  }
+
+  function setSourceColorMode() {
+    state.paletteId = SOURCE_COLOR_MODE_ID;
+    state.toneIndex = null;
+    renderGrid();
+    applyPaletteToUI();
+    renderPreview();
+    renderToneRamp();
+    renderPrompt();
+    saveState();
+  }
+
+  function renderSourceColorMode() {
+    els.sourceColorModeBtn.setAttribute("aria-pressed", String(isSourceColorMode()));
   }
 
   function renderTiles() {
@@ -673,9 +719,18 @@ Print Ready at Professional Print Quality`;
 
   function renderToneRamp() {
     const p = getPalette();
+    els.toneRamp.replaceChildren();
+    if (isSourceColorMode()) {
+      els.toneRampPaletteName.textContent = "(ใช้สีจริงจากต้นฉบับ)";
+      const note = document.createElement("span");
+      note.className = "source-colors-note";
+      note.textContent = "ระบบจะรักษาสีจริงของภาพ วัตถุ ตัวละคร เครื่องแบบ โลโก้ และองค์ประกอบต้นฉบับ";
+      els.toneRamp.appendChild(note);
+      return;
+    }
+
     els.toneRampPaletteName.textContent = `(${p.name})`;
     const tones = toneColorsOf(p);
-    els.toneRamp.innerHTML = "";
     tones.forEach((hex, i) => {
       const sw = document.createElement("button");
       sw.type = "button";
@@ -695,13 +750,19 @@ Print Ready at Professional Print Quality`;
   }
 
   function applyPaletteToUI() {
-    const p = getPalette().colors;
     const root = document.documentElement.style;
-    root.setProperty("--p-primary", p.primary);
-    root.setProperty("--p-secondary", p.secondary);
-    root.setProperty("--p-tertiary", p.tertiary);
-    root.setProperty("--p-metallic", p.metallic);
-    root.setProperty("--p-bg", p.bg);
+    if (isSourceColorMode()) {
+      ["--p-primary", "--p-secondary", "--p-tertiary", "--p-metallic", "--p-bg"]
+        .forEach((property) => root.removeProperty(property));
+    } else {
+      const p = getPalette().colors;
+      root.setProperty("--p-primary", p.primary);
+      root.setProperty("--p-secondary", p.secondary);
+      root.setProperty("--p-tertiary", p.tertiary);
+      root.setProperty("--p-metallic", p.metallic);
+      root.setProperty("--p-bg", p.bg);
+    }
+    renderSourceColorMode();
   }
 
   function renderContentTypeOptions() {
@@ -796,6 +857,13 @@ Print Ready at Professional Print Quality`;
     els.previewType.textContent = state.contentType.toUpperCase();
     els.previewTitle.textContent = state.content.trim() || "หัวข้อของคุณจะแสดงที่นี่";
     els.previewRatio.textContent = state.aspectRatio;
+    if (isSourceColorMode()) {
+      const label = document.createElement("span");
+      label.className = "source-colors-preview";
+      label.textContent = "SOURCE-AUTHENTIC COLORS";
+      els.previewSwatches.replaceChildren(label);
+      return;
+    }
     els.previewSwatches.innerHTML = Object.values(p.colors)
       .map((c) => `<span style="background:${c}"></span>`)
       .join("");
@@ -814,22 +882,58 @@ Print Ready at Professional Print Quality`;
       visualDirection: "",
       constraints: "",
     };
+    const sourceColorMode = isSourceColorMode();
     const content = state.content.trim() || "Topic and content as specified by the user";
     const artStyle = state.artStyle || "premium editorial rendering";
-    const background = state.backgroundPattern || "None — clean flat background";
-    const metallicLine = state.includeMetallic
-      ? `Use metallic reflections only when they align with this theme; use the palette accent ${c.metallic} sparingly.`
-      : "Do not use metallic effects; keep all surfaces matte and within the selected palette.";
-
-    return `## MASTER PROMPT — SINGLE-POINT COLOR CONTROL ##
-
-[01] SINGLE-POINT COLOR CONTROL
-COLOR THEME: ${p.name}
+    const backgroundReference = sourceColorMode
+      ? "the source-authentic colors defined in [01]"
+      : "the selected COLOR_THEME";
+    const background = (state.backgroundPattern || "None — clean flat background")
+      .replaceAll("COLOR_THEME", backgroundReference);
+    const metallicLine = sourceColorMode
+      ? "Preserve physically accurate material reflections. Do not add gold, silver, or metallic effects unless they are visible in the source or explicitly requested."
+      : state.includeMetallic
+        ? `Use metallic reflections only when they align with this theme; use the palette accent ${c.metallic} sparingly.`
+        : "Do not use metallic effects; keep all surfaces matte and within the selected palette.";
+    const masterPromptTitle = sourceColorMode
+      ? "SOURCE-AUTHENTIC COLOR CONTROL"
+      : "SINGLE-POINT COLOR CONTROL";
+    const colorControl = sourceColorMode
+      ? `COLOR MODE: SOURCE-AUTHENTIC COLORS (DEFAULT)
+Color Logic: Do not apply a preset palette. Derive and preserve the authentic colors visible or explicitly described in the source content, reference image, object, character, clothing, uniform, logo, environment, material, and every other subject-specific element.
+Color Fidelity: Keep identity-critical colors exact. Preserve natural skin tones, object colors, character colors, uniforms, logos, maps, charts, and environmental colors; do not recolor them for decoration.
+Adaptive System: Build backgrounds, text, highlights, and supporting graphics from compatible tones derived from the authentic source colors while maintaining contrast, hierarchy, and accessibility.
+Consistency: If no source color evidence exists, use a restrained neutral professional color system without imposing a named palette.
+Design Rules: Apply Visual Hierarchy, Contrast, Color Harmony, and Accessibility for seamless readability and an ultra-premium look. ${metallicLine}
+Selected Accent Tone: None forced — use only source-authentic or compatible neutral accents.`
+      : `COLOR THEME: ${p.name}
 REFERENCE PALETTE: Primary ${c.primary}, Secondary ${c.secondary}, Tertiary ${c.tertiary}, Accent/Metallic ${c.metallic}, Background ${c.bg}.
 Color Logic: This is the single control point for the entire image's color palette. Interpret this color theme and automatically generate a unified color system including Primary, Secondary, Accent, Highlight, Background, and High-Contrast Text colors.
 Consistency: Apply this color theme harmoniously across backgrounds, lighting, shadows, frames, decorative lines, icons, shapes, infographics, and every visual element. Do not retain legacy color names or blend conflicting themes.
 Design Rules: Apply Visual Hierarchy, Contrast, Color Harmony, and Accessibility for seamless readability and an ultra-premium look. ${metallicLine}
-Selected Accent Tone: ${state.toneIndex !== null ? `${toneColorsOf(p)[state.toneIndex]} — ${TONE_ROLE_LABELS[TONE_ROLES[state.toneIndex]]}` : "Use palette colors as configured"}.
+Selected Accent Tone: ${state.toneIndex !== null ? `${toneColorsOf(p)[state.toneIndex]} — ${TONE_ROLE_LABELS[TONE_ROLES[state.toneIndex]]}` : "Use palette colors as configured"}.`;
+    const paletteQualityLabel = /(?:blue|navy|sapphire).*gold|gold.*(?:blue|navy|sapphire)/i.test(p.name)
+      ? "Luxury Blue Gold Theme"
+      : `Selected Palette Fidelity: ${p.name}`;
+    const visualQualityBlock = VISUAL_QUALITY_BLOCK.replace(
+      "Luxury Blue Gold Theme",
+      sourceColorMode ? "Source-Authentic Color Fidelity" : paletteQualityLabel,
+    );
+    const colorConsistency = sourceColorMode
+      ? `Every visual element must preserve or harmonize with the source-authentic colors defined in section [01].
+Do not recolor identity-critical subjects, objects, characters, clothing, uniforms, logos, maps, charts, or materials.
+When a supporting color is needed, derive it from the source colors or use a restrained neutral professional tone.
+Do not introduce a named preset palette or unrelated legacy colors.
+Prioritize source fidelity, data accuracy, high readability, and ultimate visual cohesion.`
+      : `Every visual element in the frame must reference the single COLOR_THEME defined in section [01].
+If the COLOR_THEME changes, update the entire color scheme across the image automatically.
+Do not retain legacy colors that clash with the newly selected theme.
+Prioritize aesthetic perfection, data accuracy, high readability, and ultimate visual cohesion.`;
+
+    return `## MASTER PROMPT — ${masterPromptTitle} ##
+
+[01] SINGLE-POINT COLOR CONTROL
+${colorControl}
 
 [02] SUBJECT & CONTENT
 CONTENT TYPE: ${state.contentType}.
@@ -844,7 +948,7 @@ ${typeGuidance.configuration}
 [03] DESIGN CONCEPT
 Style: Masterpiece infographic design for premium Thai educational and official publications.
 Aesthetics: Luxurious, majestic, vibrant, official, modern, and clean.
-Mood: Dynamically adapt to the selected COLOR THEME while maintaining the identity of high-end academic media and top-tier official reports.
+Mood: Dynamically adapt to ${backgroundReference} while maintaining the identity of high-end academic media and top-tier official reports.
 Quality Standard: Apply the consolidated Visual Quality requirements in section [06].
 ART STYLE: ${artStyle}.
 ${islamicStyleGuidance.configuration}
@@ -854,8 +958,8 @@ ${islamicStyleGuidance.visualDirection}
 Layout: Professional Grid System with balanced white space — clean, spacious, and uncluttered.
 Deliverable Layout: ${typeGuidance.composition}
 Visual Hierarchy: Primary Focal Point → Secondary Elements → Supporting Information.
-Decorative Elements: Use lines, borders, banners, geometric shapes, textures, and lighting tailored exclusively to the selected COLOR THEME.
-Background Treatment: ${background}. Render it only in tonal variations derived from [01], keep it low-contrast, and never let it compete with text.
+Decorative Elements: Use lines, borders, banners, geometric shapes, textures, and lighting tailored to ${backgroundReference}.
+Background Treatment: ${background}. Keep it compatible with [01], low-contrast, and subordinate to text and identity-critical elements.
 Imagery: If people or locations appear, render them accurately in the selected context and ART STYLE. ${islamicStyleGuidance.peopleDirection}
 
 [05] TYPOGRAPHY
@@ -866,8 +970,8 @@ Quality Control: Zero text artifacts, non-distorted characters, no text overlap,
 
 [06] LIGHTING & RENDER QUALITY
 Rendering Direction: Apply ${artStyle} consistently across every subject and visual element.
-Theme-linked Lighting: Lighting and reflections must strictly react to and match the selected COLOR THEME.
-${VISUAL_QUALITY_BLOCK}
+Theme-linked Lighting: Lighting and reflections must strictly react to and match ${backgroundReference}.
+${visualQualityBlock}
 
 ${NEGATIVE_PROMPT_BLOCK}
 
@@ -883,10 +987,7 @@ Deliverable-specific constraints: ${typeGuidance.constraints}
 ${islamicStyleGuidance.constraints}
 
 [08] COLOR CONSISTENCY RULE
-Every visual element in the frame must reference the single COLOR THEME defined in section [01].
-If the COLOR THEME changes, update the entire color scheme across the image automatically.
-Do not retain legacy colors that clash with the newly selected theme.
-Prioritize aesthetic perfection, data accuracy, high readability, and ultimate visual cohesion.`;
+${colorConsistency}`;
   }
 
   function renderPrompt() {
@@ -895,13 +996,23 @@ Prioritize aesthetic perfection, data accuracy, high readability, and ultimate v
 
   function exportJson() {
     const p = getPalette();
-    const data = { palette: p, ...state };
+    const data = {
+      colorMode: isSourceColorMode() ? "source-authentic" : "preset-palette",
+      palette: p,
+      ...state,
+    };
     download(`health-prompt-${p.id}.json`, JSON.stringify(data, null, 2), "application/json");
   }
 
   function exportCssVars() {
+    if (isSourceColorMode()) {
+      const css = `:root {\n  --hp-color-mode: source-authentic;\n}\n\n/* Preserve colors from the source image, object, character, uniform, logo, and environment. */\n`;
+      download("health-prompt-source-authentic-colors.css", css, "text/css");
+      return;
+    }
+
     const c = getPalette().colors;
-    const css = `:root {\n  --hp-primary: ${c.primary};\n  --hp-secondary: ${c.secondary};\n  --hp-tertiary: ${c.tertiary};\n  --hp-metallic: ${c.metallic};\n  --hp-bg: ${c.bg};\n}\n`;
+    const css = `:root {\n  --hp-color-mode: preset-palette;\n  --hp-primary: ${c.primary};\n  --hp-secondary: ${c.secondary};\n  --hp-tertiary: ${c.tertiary};\n  --hp-metallic: ${c.metallic};\n  --hp-bg: ${c.bg};\n}\n`;
     download(`health-prompt-${getPalette().id}.css`, css, "text/css");
   }
 
@@ -1089,6 +1200,7 @@ Prioritize aesthetic perfection, data accuracy, high readability, and ultimate v
       });
     });
     els.qClear.addEventListener("click", () => setQuery(""));
+    els.sourceColorModeBtn.addEventListener("click", setSourceColorMode);
 
     els.content.addEventListener("input", (e) => {
       state.content = e.target.value;
