@@ -86,3 +86,14 @@ test("dashboard content type follows an executive KPI decision model", () => {
   assert.match(guidance.constraints, /N\/A or not provided/);
   assert.match(guidance.constraints, /Do not rely on color alone/);
 });
+
+test("Master Prompt always includes the mandatory Thai quality directive", () => {
+  assert.match(
+    script,
+    /องค์ประกอบสมดุล ภาพคมชัด แสงเงาสมจริง ตัวหนังสือภาษาไทยถูกต้อง อ่านง่าย ไม่เพิ่มคำโปรยหรือข้อความอื่น ไม่เปลี่ยนใบหน้า ไม่บิดเบือนเครื่องแบบ ไม่มีลายน้ำ ไม่มีบุคคลซ้ำ ไม่มีมือหรือนิ้วผิดรูป ตัวอักษรภาษาไทยคมชัด อ่านง่าย สะกดถูกต้อง หลีกเลี่ยงข้อความซ้ำและตัวอักษรผิดเพี้ยน/,
+  );
+  assert.match(
+    script,
+    /Professional Print Quality \/ Luxury Government Report \/ Realistic Skin Texture  \/ Sharp Focus \/ High-end Editorial Design/,
+  );
+});

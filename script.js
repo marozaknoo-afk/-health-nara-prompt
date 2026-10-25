@@ -845,6 +845,9 @@ Textures & Finish: Realistic material textures, natural depth of field, sharp fo
 Resolution Feel: 8K-class detail designed for premium high-end print media.
 Lighting Logic: Lighting and reflections must strictly react to and match the selected COLOR THEME.
 Style Standards: ${STYLE_TAGS.join(" / ")}.
+Mandatory Quality Directive:
+องค์ประกอบสมดุล ภาพคมชัด แสงเงาสมจริง ตัวหนังสือภาษาไทยถูกต้อง อ่านง่าย ไม่เพิ่มคำโปรยหรือข้อความอื่น ไม่เปลี่ยนใบหน้า ไม่บิดเบือนเครื่องแบบ ไม่มีลายน้ำ ไม่มีบุคคลซ้ำ ไม่มีมือหรือนิ้วผิดรูป ตัวอักษรภาษาไทยคมชัด อ่านง่าย สะกดถูกต้อง หลีกเลี่ยงข้อความซ้ำและตัวอักษรผิดเพี้ยน
+Professional Print Quality / Luxury Government Report / Realistic Skin Texture  / Sharp Focus / High-end Editorial Design
 
 [07] OUTPUT SPECIFICATIONS
 ASPECT RATIO: ${state.aspectRatio}.
