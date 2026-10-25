@@ -299,3 +299,243 @@ footer .wrap { display: flex; align-items: center; justify-content: space-betwee
 footer .brand-t small { color: var(--muted); }
 footer .credit { display: block; border-top: 0; padding-top: 14px; text-align: center; }
 footer .credit p { margin: 0; color: var(--faint); font-size: 12px; line-height: 1.7; }
+
+
+/* ---------- responsive hardening ---------- */
+.promo > *,
+.field,
+.field-label-row,
+.res-title,
+.output-actions,
+footer .brand,
+footer .brand-t {
+  min-width: 0;
+}
+textarea,
+select {
+  width: 100%;
+  min-width: 0;
+}
+.formula li span,
+.attach-report dd,
+footer .brand-t {
+  overflow-wrap: anywhere;
+}
+.wrap {
+  padding-left: max(clamp(16px, 3.2vw, 40px), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(16px, 3.2vw, 40px), env(safe-area-inset-right, 0px));
+}
+
+@media (max-width: 1120px) {
+  .nav-search {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  body {
+    background-attachment: scroll;
+  }
+  .sec {
+    padding-block: 36px;
+  }
+  .hero-grid {
+    gap: 22px;
+  }
+  .bento {
+    grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
+  }
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --nav-h: 60px;
+  }
+  .wrap {
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+  }
+  .nav-in {
+    gap: 10px;
+  }
+  .brand-t b {
+    font-size: 14px;
+  }
+  .brand-t small {
+    font-size: 10.5px;
+  }
+  .nav-actions {
+    margin-left: auto;
+  }
+  .hero-wrap {
+    padding-block: 10px 4px;
+  }
+  .hero {
+    padding: 28px 18px 26px;
+    border-radius: 22px;
+  }
+  .hero-grid {
+    gap: 20px;
+  }
+  .hero h1,
+  .hero-org {
+    font-size: clamp(26px, 8vw, 36px);
+  }
+  .hero p.lead {
+    font-size: 14px;
+  }
+  .hsearch input {
+    height: 54px;
+    padding-inline: 48px 50px;
+    border-radius: 16px;
+  }
+  .hsearch .s-ico {
+    left: 16px;
+  }
+  .hsearch .s-right {
+    right: 9px;
+  }
+  .quick {
+    gap: 6px;
+  }
+  .quick button {
+    padding: 7px 12px;
+  }
+  .hstats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    padding-top: 18px;
+  }
+  .hstats div {
+    padding-inline: 6px;
+  }
+  .hstats b {
+    font-size: 20px;
+  }
+  .hstats small {
+    font-size: 10.5px;
+    line-height: 1.4;
+  }
+  .sec {
+    padding-block: 30px;
+  }
+  .sec-head {
+    align-items: flex-start;
+  }
+  .bento,
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .promo {
+    gap: 22px;
+    padding: 18px;
+    border-radius: 22px;
+  }
+  .field-label-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .field-label-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .field-label-row .btn.sm {
+    height: 40px;
+  }
+  .formula li {
+    align-items: flex-start;
+  }
+  .attach-report .ar-head {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .output-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+  }
+  .output-actions .btn.dark {
+    grid-column: 1 / -1;
+  }
+  .output-actions .btn {
+    width: 100%;
+  }
+  .prompt-output {
+    min-height: 300px;
+  }
+  footer .wrap {
+    align-items: flex-start;
+  }
+  footer .brand {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .logo {
+    width: 32px;
+    height: 32px;
+  }
+  .brand-t b {
+    font-size: 13px;
+  }
+  .brand-t small {
+    display: none;
+  }
+  .hero {
+    padding-inline: 14px;
+  }
+  .hero h1,
+  .hero-org {
+    font-size: clamp(24px, 8.2vw, 31px);
+  }
+  .eyebrow {
+    font-size: 12px;
+  }
+  .res-title {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .output-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .output-actions .btn.dark {
+    grid-column: auto;
+  }
+  .formula li {
+    padding-inline: 10px;
+  }
+}
+
+@media (pointer: coarse) {
+  button,
+  .btn,
+  .pill-btn,
+  .tone-swatch,
+  .icon-btn,
+  .hsearch .clear {
+    min-height: 44px;
+  }
+  .icon-btn {
+    width: 44px;
+  }
+  .tone-swatch {
+    min-width: 44px;
+  }
+  .field-label-row .btn.sm {
+    min-height: 44px;
+  }
+}
+
+@media (hover: none) {
+  .tile:hover,
+  .card.palette-card:hover,
+  .quick button:hover,
+  .tone-swatch:hover {
+    transform: none;
+  }
+}

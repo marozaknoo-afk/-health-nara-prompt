@@ -9,11 +9,13 @@ const { buildContentTypeGuidance, getContentTypeProfile } = require("../content-
 const scriptUrl = new URL("../script.js", import.meta.url);
 const indexUrl = new URL("../index.html", import.meta.url);
 const ratioUrl = new URL("../aspect-ratios.js", import.meta.url);
+const styleUrl = new URL("../style.css", import.meta.url);
 
-const [script, index, ratios] = await Promise.all([
+const [script, index, ratios, styles] = await Promise.all([
   readFile(scriptUrl, "utf8"),
   readFile(indexUrl, "utf8"),
   readFile(ratioUrl, "utf8"),
+  readFile(styleUrl, "utf8"),
 ]);
 
 const requiredSections = [
@@ -178,4 +180,14 @@ test("system-authored Master Prompt instructions contain no Thai text", () => {
   const buildEnd = script.indexOf("function renderPrompt", buildStart);
   assert.doesNotMatch(script.slice(negativeStart, negativeEnd), /[ก-๙]/);
   assert.doesNotMatch(script.slice(buildStart, buildEnd), /[ก-๙]/);
+});
+
+test("responsive CSS covers narrow screens, safe areas, and touch targets", () => {
+  assert.match(index, /viewport-fit=cover/);
+  assert.match(styles, /env\(safe-area-inset-left/);
+  assert.match(styles, /@media \(max-width: 640px\)/);
+  assert.match(styles, /@media \(max-width: 380px\)/);
+  assert.match(styles, /@media \(pointer: coarse\)/);
+  assert.match(styles, /min-height: 44px/);
+  assert.match(styles, /minmax\(min\(220px, 100%\), 1fr\)/);
 });
