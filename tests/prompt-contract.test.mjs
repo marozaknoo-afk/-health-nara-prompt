@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
+import { createRequire } from "node:module";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+
+const require = createRequire(import.meta.url);
+const { buildContentTypeGuidance, getContentTypeProfile } = require("../content-types.js");
 
 const scriptUrl = new URL("../script.js", import.meta.url);
 const indexUrl = new URL("../index.html", import.meta.url);
@@ -66,4 +70,19 @@ test("popular palette shortcuts search across every category", () => {
     quickFunction.indexOf('state.category = "All"') < quickFunction.indexOf("setQuery(btn.dataset.name)"),
     "category must reset before the shortcut search runs",
   );
+});
+
+test("dashboard content type follows an executive KPI decision model", () => {
+  const profile = getContentTypeProfile("Dashboard / Data Visual");
+  const guidance = buildContentTypeGuidance("Dashboard / Data Visual");
+  assert.equal(profile.label, "แดชบอร์ด KPI สำหรับผู้บริหาร");
+  assert.equal(profile.hierarchy, "executive-decision-first");
+  assert.ok(profile.requiredZones.includes("KPI cards with actual and target"));
+  assert.ok(profile.requiredZones.includes("priority exceptions and actions"));
+  assert.match(guidance.composition, /current status/i);
+  assert.match(guidance.composition, /off target/i);
+  assert.match(guidance.composition, /needs action/i);
+  assert.match(guidance.visualDirection, /actual-versus-target/i);
+  assert.match(guidance.constraints, /N\/A or not provided/);
+  assert.match(guidance.constraints, /Do not rely on color alone/);
 });

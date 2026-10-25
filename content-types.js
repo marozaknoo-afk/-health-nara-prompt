@@ -182,12 +182,27 @@
       label: "ข้อมูล สถิติ และการบริหาร",
       types: [
         defineType({
-          id: "dashboard-data-visual", value: "Dashboard / Data Visual", label: "แดชบอร์ด / ข้อมูลเชิงภาพ",
-          textDensity: "high", hierarchy: "kpi-overview-first", safeArea: "5%",
-          recommendedRatios: ["16:9", "A4 Landscape"], requiredZones: ["summary KPIs", "trend visuals", "breakdowns", "filters or context", "data source"],
-          composition: "Use a strict dashboard grid with top-level KPIs, comparable chart panels, consistent scales, clear labels, and a compact context or source area.",
-          visualDirection: "Prioritize analytical clarity, restrained depth, accessible chart colors, and consistent data encoding over decorative illustration.",
-          constraints: ["Do not fabricate metrics, trends, labels, filters, or chart values.", "Do not use 3D charts or misleading axes."],
+          id: "dashboard-data-visual", value: "Dashboard / Data Visual", label: "แดชบอร์ด KPI สำหรับผู้บริหาร",
+          textDensity: "medium-high", hierarchy: "executive-decision-first", safeArea: "6%",
+          recommendedRatios: ["16:9", "A4 Landscape"],
+          requiredZones: [
+            "executive summary",
+            "KPI cards with actual and target",
+            "variance and status",
+            "trend and comparison",
+            "priority exceptions and actions",
+            "reporting period",
+            "data source and last updated",
+          ],
+          composition: "Build an executive decision dashboard that answers three questions at a glance: What is the current status? Where is performance off target? What needs action now? Use a strict 16:9 grid with a concise executive summary, one top row of 4–6 priority KPI cards, a second layer for trends and comparisons, and a clearly separated exception-and-action area. Pair every KPI with its actual value, target, variance, status, and reporting period; keep scales and comparison logic consistent.",
+          visualDirection: "Create a fast executive scan path using large numerals, short KPI names, actual-versus-target comparisons, variance arrows with text labels, compact sparklines or trend charts, and status markers that combine color with icons or words. Emphasize exceptions and required decisions over decorative illustration; keep supporting breakdowns subordinate to the top-level KPIs.",
+          constraints: [
+            "Do not fabricate KPI values, targets, thresholds, status, variance, trends, reporting periods, owners, or recommended actions.",
+            "If a required value is missing, mark it as N/A or not provided instead of inferring it.",
+            "Do not rely on color alone to communicate status; pair color with a label, icon, or pattern.",
+            "Do not use 3D charts, misleading axes, inconsistent scales, decorative gauges without a real threshold, or dense panels that hide the executive takeaway.",
+            "Do not expose personally identifiable or patient-level information.",
+          ],
         }),
         defineType({
           id: "kpi-scorecard", value: "KPI Scorecard", label: "สรุปตัวชี้วัด KPI",
