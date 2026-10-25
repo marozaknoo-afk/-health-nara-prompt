@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Health Prompt Studio</title>
+<meta name="description" content="คลัง Prompt ภาพ AI สำหรับงานสุขภาพและราชการไทย — เลือกพาเลตสี กำหนดเนื้อหา แล้วคัดลอก Master Prompt ไปใช้ได้ทันที" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2l2.2 6.3L20 10l-5.8 1.7L12 18l-2.2-6.3L4 10l5.8-1.7L12 2z"/></symbol>
+      <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3 7 7 0 0021 12.8z"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+      <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4 12.5-12.5z"/></symbol>
+      <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 21h14"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 109 9c0-1-.8-1.5-1.8-1.5h-2.4a2 2 0 01-2-2 2 2 0 01.6-1.4A2 2 0 0015 5.6 7 7 0 0012 3z"/><circle cx="7.5" cy="12" r="1.2"/><circle cx="9.5" cy="8" r="1.2"/><circle cx="14.5" cy="7.5" r="1.2"/></symbol>
+    </defs>
+  </svg>
+
+  <header class="nav" id="nav">
+    <div class="wrap nav-in">
+      <a class="brand" href="#top">
+        <span class="logo"><svg class="i"><use href="#i-spark"/></svg></span>
+        <span class="brand-t"><b>Health Prompt Studio</b><small>AI Visual Prompt Library</small></span>
+      </a>
+      <nav class="nav-links" aria-label="ลัดไปยังส่วนต่าง ๆ">
+        <button type="button" data-goto="cats">หมวดหมู่สี</button>
+        <button type="button" data-goto="results">พาเลตทั้งหมด</button>
+        <button type="button" data-goto="config">กำหนดเนื้อหา</button>
+        <button type="button" data-goto="output">Master Prompt</button>
+      </nav>
+      <div class="nav-search" role="search">
+        <svg class="i"><use href="#i-search"/></svg>
+        <label for="navSearch" class="sr-only">ค้นหาพาเลตสี</label>
+        <input id="navSearch" type="search" autocomplete="off" spellcheck="false" placeholder="ค้นหาพาเลต…" />
+      </div>
+      <div class="nav-actions">
+        <button class="icon-btn" type="button" id="themeBtn" aria-label="สลับโหมดสว่าง/มืด">
+          <svg class="i"><use href="#i-moon"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <div class="wrap hero-wrap">
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="hero-fx" aria-hidden="true">
+          <i class="pulse" style="--x:14%;--y:28%"></i>
+          <i class="pulse" style="--x:86%;--y:70%;--dl:-1.8s"></i>
+          <i class="pulse" style="--x:70%;--y:20%;--dl:-3.2s"></i>
+        </div>
+        <div class="hero-grid">
+          <span class="eyebrow"><span class="dot"><svg class="i"><use href="#i-spark"/></svg></span>Health Prompt Studio</span>
+          <h1 id="heroTitle">ปลดล็อกจินตนาการ<br /><span class="gt">Gen ภาพข้ามขีดจำกัด</span></h1>
+          <p class="hero-org">สำนักงานสาธารณสุขจังหวัดนราธิวาส</p>
+          <p class="lead">เลือกพาเลตสีที่ออกแบบมาเฉพาะงานสุขภาพและราชการ กำหนดเนื้อหา แล้วคัดลอก Master Prompt ตามหลักเกณฑ์ [01]–[08] ไปใช้กับ Midjourney, DALL·E, Gemini หรือเครื่องมือ AI image อื่น ๆ ได้ทันที</p>
+          <div class="hsearch" role="search" id="heroSearch">
+            <svg class="i s-ico"><use href="#i-search"/></svg>
+            <label for="q" class="sr-only">ค้นหาพาเลตสี</label>
+            <input id="q" type="search" autocomplete="off" spellcheck="false" placeholder="ค้นหา เช่น Luxury, Medical, Government, Teal…" />
+            <span class="s-right"><button class="clear" id="qClear" type="button" aria-label="ล้างคำค้นหา" hidden><svg class="i"><use href="#i-x"/></svg></button></span>
+          </div>
+          <div class="quick" id="quick"><span>ยอดนิยม</span></div>
+          <div class="hstats" id="stats"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="wrap sec" id="cats" aria-labelledby="catsTitle">
+      <div class="sec-head">
+        <div>
+          <div class="kick">Categories</div>
+          <h2 id="catsTitle">เลือกตามหมวดหมู่สี</h2>
+          <p>ครอบคลุมตั้งแต่งานสุขภาพในชีวิตประจำวัน จนถึงรายงานราชการระดับลักชัวรี</p>
+        </div>
+      </div>
+      <div class="bento" id="tiles"></div>
+    </section>
+
+    <section class="wrap sec" id="results" aria-labelledby="resTitle">
+      <div class="pillbar"><div class="pills" id="pills" role="toolbar" aria-label="หมวดหมู่สี"></div></div>
+      <div class="res-head">
+        <div class="res-title"><h2 id="resTitle">พาเลตสีทั้งหมด</h2><span class="count" id="resCount"></span></div>
+      </div>
+      <div class="grid" id="paletteGrid" role="listbox" aria-label="รายการพาเลตสี"></div>
+
+      <div class="tone-ramp-wrap">
+        <h3>โทนสี 4 สีจริงของพาเลตที่เลือก <small id="toneRampPaletteName"></small></h3>
+        <div class="tone-ramp" id="toneRamp" role="listbox" aria-label="โทนสี 4 สีของพาเลต"></div>
+      </div>
+    </section>
+
+    <section class="wrap sec" id="config" aria-labelledby="configTitle">
+      <div class="promo">
+        <div>
+          <div class="kick">Content &amp; Format</div>
+          <h2 id="configTitle">กำหนดเนื้อหา &amp; รูปแบบ</h2>
+
+          <label class="field">
+            <span class="field-label-row">ใส่เนื้อหา CONTENT — หัวข้อ/เนื้อหาหลัก<span class="field-label-actions"><button type="button" class="btn sm ghost" id="attachFileBtn">แนบไฟล์</button><button type="button" class="btn sm ghost" id="clearContentBtn">ล้างข้อความ</button></span></span>
+            <input type="file" id="attachFileInput" accept=".txt,.md,.xlsx,.xls,.docx,.doc,text/plain,text/markdown" hidden />
+            <textarea id="contentInput" rows="2" placeholder="เช่น ปกรายงานประจำปี งานสาธารณสุขปฐมภูมิ จังหวัดนราธิวาส"></textarea>
+            <small id="attachFileStatus" class="field-hint" role="status" aria-live="polite"></small>
+            <div id="attachFileReport" class="attach-report" role="status" aria-live="polite" hidden></div>
+          </label>
+
+          <label class="field">
+            <span>DEPARTMENT — กลุ่มงาน (สสจ.นราธิวาส)</span>
+            <select id="department">
+              <option value="">ไม่ระบุกลุ่มงาน</option>
+              <option value="กลุ่มงานบริหารทั่วไป">1. กลุ่มงานบริหารทั่วไป</option>
+              <option value="กลุ่มงานบริหารทรัพยากรบุคคล">2. กลุ่มงานบริหารทรัพยากรบุคคล</option>
+              <option value="กลุ่มงานพัฒนายุทธศาสตร์สาธารณสุข">3. กลุ่มงานพัฒนายุทธศาสตร์สาธารณสุข</option>
+              <option value="กลุ่มงานสุขภาพดิจิทัล">4. กลุ่มงานสุขภาพดิจิทัล</option>
+              <option value="กลุ่มงานประกันสุขภาพ">5. กลุ่มงานประกันสุขภาพ</option>
+              <option value="กลุ่มกฎหมาย">6. กลุ่มกฎหมาย</option>
+              <option value="กลุ่มงานปฐมภูมิและเครือข่ายบริการ">7. กลุ่มงานปฐมภูมิและเครือข่ายบริการ</option>
+              <option value="กลุ่มงานพัฒนาคุณภาพและรูปแบบบริการ">8. กลุ่มงานพัฒนาคุณภาพและรูปแบบบริการ</option>
+              <option value="กลุ่มงานส่งเสริมสุขภาพ">9. กลุ่มงานส่งเสริมสุขภาพ</option>
+              <option value="กลุ่มงานทันตสาธารณสุข">10. กลุ่มงานทันตสาธารณสุข</option>
+              <option value="กลุ่มงานอนามัยสิ่งแวดล้อมและอาชีวอนามัย">11. กลุ่มงานอนามัยสิ่งแวดล้อมและอาชีวอนามัย</option>
+              <option value="กลุ่มงานควบคุมโรคติดต่อ">12. กลุ่มงานควบคุมโรคติดต่อ</option>
+              <option value="กลุ่มงานควบคุมโรคไม่ติดต่อ สุขภาพจิตและยาเสพติด">13. กลุ่มงานควบคุมโรคไม่ติดต่อ สุขภาพจิตและยาเสพติด</option>
+              <option value="กลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก">14. กลุ่มงานการแพทย์แผนไทยและการแพทย์ทางเลือก</option>
+              <option value="กลุ่มงานคุ้มครองผู้บริโภคและเภสัชสาธารณสุข">15. กลุ่มงานคุ้มครองผู้บริโภคและเภสัชสาธารณสุข</option>
+            </select>
+          </label>
+
+          <div class="field-row">
+            <label class="field">
+              <span>CONTENT_TYPE — ประเภทเนื้อหา</span>
+              <select id="contentType"></select>
+            </label>
+
+            <label class="field">
+              <span>ASPECT_RATIO — อัตราส่วนภาพ</span>
+              <select id="aspectRatio" aria-describedby="aspectRatioHint"></select>
+              <small id="aspectRatioHint" class="field-hint" role="status" aria-live="polite"></small>
+            </label>
+          </div>
+
+          <label class="field">
+            <span>BACKGROUND_PATTERN — พื้นหลัง/ลวดลายประกอบ</span>
+            <select id="backgroundPattern">
+              <option value="">ไม่มี / พื้นเรียบ (None)</option>
+              <option value="Geometric Line Pattern">ลายเส้นเรขาคณิต (Geometric Lines)</option>
+              <option value="Subtle Grid Texture">ลายกริดบาง ๆ (Subtle Grid)</option>
+              <option value="Gradient Mesh Texture">ไล่สีแบบ Mesh (Gradient Mesh)</option>
+              <option value="Dotted Pattern">ลายจุด (Dotted Pattern)</option>
+              <option value="Wave / Flowing Line Pattern">ลายคลื่น (Wave Pattern)</option>
+              <option value="Official Emblem Watermark Texture">ลายน้ำตราสัญลักษณ์ทางการ (Emblem Watermark)</option>
+              <option value="Soft pastel blue-white sky background with gentle soft clouds, soft glow and bokeh lighting, golden sparkle accents, blended with a faint blue-gold applied Thai pattern motif for subtle depth without clutter">ท้องฟ้าฟ้า-ขาว + เมฆนุ่ม + Golden Sparkle + ลายไทยจาง ๆ</option>
+              <option value="Flowing, rippling fabric layered with metallic gold ribbons creating a luxury 3D dimension, elegant champagne-gold curved lines gracefully wrapping around the composition, with soft glow, golden sparkle, and small light flares added in balanced, uncluttered amounts">ผ้าพลิ้วไหว + ริบบิ้นทองเมทัลลิก 3D หรูหรา</option>
+              <option value="Lower section uses silk fabric with flowing multi-layered waves and glossy gold edges, blended with gold Thai pattern motifs and faint Thai pattern details on a deep green background, conveying an elegant, premium official government document feel">ผ้าไหมเขียวเข้ม + ขอบทอง + ลายไทยทอง (เอกสารราชการพรีเมียม)</option>
+              <option value="Background gradient flowing from a light cream-gold tone at the top down to navy blue blended with gold at the bottom, with curved metallic gold ribbon lines and softly flowing translucent white layers, soft glow and fine golden sparkle light, giving the image a premium luxurious academic-document feel">ไล่เฉดครีมทอง → น้ำเงินกรมท่าทอง + ริบบิ้นทอง (เอกสารวิชาการหรูหรา)</option>
+              <option value="Background gradient fading into a deeper tone of COLOR_THEME at the bottom, with curved metallic gold ribbon lines and softly flowing translucent white silk-like layers, soft glow and fine golden sparkle light, giving the image a luxurious, dimensional look">ไล่เฉดสีธีมด้านล่าง + ริบบิ้นทอง + ผ้าไหมโปร่งแสง (หรูหรามีมิติ)</option>
+              <option value="Uses the palette's tone colors blended with metallic gold — a softly flowing pink gradient background with flowing ribbons, curved gold lines, sparkling shimmering light, and thin translucent patterns, giving a luxurious, dimensional, and easy-on-the-eyes feel">ไล่เฉดชมพูนุ่มนวล + ริบบิ้นทอง + ประกายระยิบระยับ (หรูหรา สบายตา)</option>
+              <option value="Uses the palette's tone colors blended with metallic gold — a softly blended gradient background decorated with flowing ribbons, curved gold lines, sparkling shimmering light, and seafoam-green and white flowers, composed harmoniously and beautifully without visual clutter">ไล่เฉดนุ่มนวล + ริบบิ้นทอง + ดอกไม้เขียวน้ำทะเล-ขาว (กลมกลืน สวยงาม)</option>
+              <option value="Minimalist botanical herbal leaf patterns outlined with gold leaf accents, set on a pure white marble background, conveying elevated natural healing">โบทานิคัลขอบทองคำเปลว (Botanical Gold Leaf)</option>
+              <option value="Clear iridescent crystal formations with rainbow shimmer, layered over a pastel sky-blue/powder-blue background, conveying cleanliness, innovation, and cutting-edge medical technology">คริสตัลออร่าชีวภาพ (Bioluminescent Crystal)</option>
+              <option value="Flowing ribbon lines resembling champagne-gold silk fabric, contrasted against a white or cream background, evoking softness and premium-level service">ไหมพริ้วไหวสีแชมเปญ (Champagne Silk Fluidity)</option>
+              <option value="Frequency wave-line patterns resembling sound waves or heartbeat waveforms, rendered with a 3D holographic effect reflecting rose-gold light, conveying future wellness technology">คลื่นโฮโลแกรมเพื่อสุขภาพ (Holographic Wellness Waves)</option>
+              <option value="Interconnected circular or hexagonal cell-like geometric shapes arranged on a glossy, pearlescent surface, conveying deep cellular-level restoration">เซลล์เรขาคณิตสีมุก (Pearl Cellular Geometry)</option>
+              <option value="Clear dewdrop patterns reflecting radiant gold light on a calm, still water surface, conveying freshness, healing, and purity">หยดน้ำค้างทองคำ (Liquid Gold Drops)</option>
+              <option value="A soft sunburst radial gradient from pastel sky-blue into white, with fine gold stardust particles, conveying hope and a fresh start toward better health">รุ่งอรุณแห่งการฟื้นฟู (Zenith Sunburst)</option>
+              <option value="Layered frosted translucent glass panels (glassmorphism) revealing softly blurred seafoam-green floral patterns behind, conveying calm and good mental health">มิติแก้วซ้อนทับ (Ethereal Glassmorphism)</option>
+              <option value="Thin gold ribbon strands twisting together like a DNA double helix, set on a deep navy or cream-white background, conveying personalized medical expertise">เส้นสายไหมทองคำพันเกลียว (DNA Gold Thread)</option>
+              <option value="Fluid, liquid-like marble patterns with cracks mended by gold seams in Kintsugi style, conveying healing and restoring the body to a state as precious as a work of art">หินอ่อนเหลวผสมทองคำ (Liquid Marble &amp; Gold Kintsugi)</option>
+            </select>
+          </label>
+
+          <label class="field">
+            <span>ART_STYLE — สไตล์ตัวละคร/ภาพ</span>
+            <select id="artStyle">
+              <option value="">ไม่ระบุสไตล์</option>
+              <optgroup label="1. กลุ่มงานสมจริง (Realistic & Photographic)">
+                <option value="Photorealistic">Photorealistic — สมจริงระดับภาพถ่าย</option>
+                <option value="Cinematic">Cinematic — สมจริงแบบภาพยนตร์</option>
+                <option value="Hyper-realistic">Hyper-realistic — สมจริงยิ่งกว่าภาพถ่าย</option>
+              </optgroup>
+              <optgroup label="2. กลุ่มลายเส้นและแอนิเมชัน (2D & Stylized)">
+                <option value="Anime / Manga">Anime / Manga — สไตล์การ์ตูนญี่ปุ่น</option>
+                <option value="Western Comic">Western Comic — สไตล์คอมมิคตะวันตก</option>
+                <option value="Flat Illustration / Vector Art">Flat Illustration / Vector Art — ลายเส้น 2D สีพื้น</option>
+                <option value="Chibi">Chibi — สัดส่วนหัวโตตัวเล็ก</option>
+              </optgroup>
+              <optgroup label="3. กลุ่ม 3 มิติและคอมพิวเตอร์กราฟิก (3D & CGI)">
+                <option value="3D Render">3D Render — สไตล์แอนิเมชันตะวันตก</option>
+                <option value="2.5D (Semi-real)">2.5D (Semi-real) — ผสม 2D และ 3D</option>
+                <option value="Low Poly">Low Poly — 3D โพลีกอนน้อย</option>
+                <option value="Claymation">Claymation — สไตล์ปั้นดินน้ำมัน</option>
+              </optgroup>
+              <optgroup label="4. กลุ่มศิลปะดั้งเดิม (Artistic & Traditional Media)">
+                <option value="Watercolor">Watercolor — ภาพวาดสีน้ำ</option>
+                <option value="Sketch / Line Art">Sketch / Line Art — ภาพร่างดินสอ/ปากกา</option>
+                <option value="Oil Painting">Oil Painting — ภาพวาดสีน้ำมันคลาสสิก</option>
+              </optgroup>
+              <optgroup label="5. กลุ่มไซไฟและแฟนตาซี (Sci-Fi & Fantasy)">
+                <option value="Mecha / Cyborg">Mecha / Cyborg — หุ่นยนต์ ไซบอร์ก</option>
+                <option value="Creature / Monster">Creature / Monster — สัตว์ประหลาด/ในตำนาน</option>
+                <option value="Cyberpunk / Steampunk">Cyberpunk / Steampunk — โลกอนาคต/เครื่องจักรไอน้ำ</option>
+              </optgroup>
+              <optgroup label="6. กลุ่มงานเกมและยุคเรโทร (Game Art & Retro)">
+                <option value="Pixel Art">Pixel Art — ศิลปะพิกเซล 8-bit/16-bit</option>
+                <option value="Voxel">Voxel — 3D แบบบล็อกสี่เหลี่ยม</option>
+              </optgroup>
+              <optgroup label="7. กลุ่มมนุษย์เสมือนและตัวตนดิจิทัล (Virtual Beings)">
+                <option value="Metahuman">Metahuman — ตัวละคร 3D สมจริงระดับมนุษย์</option>
+                <option value="VTuber Model">VTuber Model — จับการเคลื่อนไหวใบหน้าคนจริง</option>
+              </optgroup>
+            </select>
+          </label>
+
+          <div class="field-row">
+            <label class="checkbox-field">
+              <input type="checkbox" id="includePeople" checked />
+              <span>รวมภาพบุคลากรสาธารณสุข</span>
+            </label>
+            <label class="checkbox-field">
+              <input type="checkbox" id="includeMetallic" checked />
+              <span>เอฟเฟกต์โลหะ/ทอง (ถ้าพาเลตมี)</span>
+            </label>
+          </div>
+
+          <div class="field">
+            <span>STYLE_TAGS — มาตรฐานภาพที่บังคับใช้ทุกครั้ง</span>
+            <div id="styleTags" class="style-tags" aria-label="รายการมาตรฐานภาพที่บังคับใช้"></div>
+          </div>
+        </div>
+
+        <ol class="formula">
+          <li><b>01</b><span><strong>Color Control</strong> · จุดควบคุมสีเดียวทั้งภาพ</span></li>
+          <li><b>02</b><span><strong>Subject &amp; Content</strong> · รักษาข้อมูลต้นฉบับ</span></li>
+          <li><b>03</b><span><strong>Design Concept</strong> · แนวคิดรายงานพรีเมียม</span></li>
+          <li><b>04</b><span><strong>Visual Composition</strong> · กริดและลำดับความสำคัญ</span></li>
+          <li><b>05</b><span><strong>Typography</strong> · ภาษาไทยคมชัดอ่านง่าย</span></li>
+          <li><b>06</b><span><strong>Lighting &amp; Quality</strong> · แสง วัสดุ และคุณภาพเรนเดอร์</span></li>
+          <li><b>07</b><span><strong>Output Specifications</strong> · 16:9, 8K และ 300 DPI</span></li>
+          <li><b>08</b><span><strong>Color Consistency</strong> · ทุกส่วนอ้างอิงธีมเดียว</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="wrap sec" id="preview" aria-labelledby="previewHeading">
+      <div class="sec-head"><div><div class="kick">Live Preview</div><h2 id="previewHeading">พรีวิวสด</h2></div></div>
+      <div id="previewStage" class="preview-stage">
+        <div class="preview-shimmer"></div>
+        <div class="preview-particles">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+        <div class="preview-content">
+          <p class="preview-eyebrow" id="previewType">BOOK / REPORT COVER</p>
+          <h3 class="preview-title" id="previewTitle">หัวข้อของคุณจะแสดงที่นี่</h3>
+          <div class="preview-swatch-row" id="previewSwatches"></div>
+          <p class="preview-ratio" id="previewRatio">3:4</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap sec" id="output" aria-labelledby="outputHeading">
+      <div class="sec-head">
+        <div><div class="kick">Master Prompt</div><h2 id="outputHeading">พร้อมคัดลอกใช้งาน</h2></div>
+        <div class="output-actions">
+          <button id="copyBtn" type="button" class="btn dark"><svg class="i"><use href="#i-copy"/></svg>คัดลอก</button>
+          <button id="exportJsonBtn" type="button" class="btn sm"><svg class="i"><use href="#i-down"/></svg>Export JSON</button>
+          <button id="exportCssBtn" type="button" class="btn sm"><svg class="i"><use href="#i-down"/></svg>Export CSS</button>
+        </div>
+      </div>
+      <textarea id="promptOutput" class="prompt-output" readonly aria-label="Master Prompt ที่สร้างขึ้น"></textarea>
+      <p id="copyStatus" class="copy-status" role="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span class="brand" style="gap:10px">
+        <span class="logo" style="width:28px;height:28px;border-radius:9px"><svg class="i" style="width:15px;height:15px"><use href="#i-spark"/></svg></span>
+        <span class="brand-t"><b>Health Prompt Studio</b><small>เครื่องมือสร้างพรอมป์ AI สำหรับงานสุขภาพและราชการไทย</small></span>
+      </span>
+      <span style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sm" type="button" id="footerExportJson"><svg class="i"><use href="#i-down"/></svg>ส่งออก JSON</button>
+        <button class="btn sm" type="button" id="footerExportCss"><svg class="i"><use href="#i-down"/></svg>ส่งออก CSS</button>
+      </span>
+    </div>
+    <div class="wrap credit">
+      <p>จัดทำโดย นายมะรอซา กูโน<br />
+      ตำแหน่งปัจจุบัน: นักวิชาการสาธารณสุข ชำนาญการ<br />
+      กลุ่มงานปฐมภูมิและเครือข่ายสุขภาพ สำนักงานสาธารณสุขจังหวัดนราธิวาส</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script src="content-types.js"></script>
+  <script src="aspect-ratios.js"></script>
+  <script src="islamic-art-styles.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
