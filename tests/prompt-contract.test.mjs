@@ -87,15 +87,15 @@ test("dashboard content type follows an executive KPI decision model", () => {
   assert.match(guidance.constraints, /Do not rely on color alone/);
 });
 
-test("Master Prompt always includes the mandatory English quality directive", () => {
-  assert.match(
-    script,
-    /Balanced composition, sharp imagery, realistic lighting and shadows, and correct, legible Thai text\. Do not add taglines or any other text\. Do not alter faces\. Do not distort uniforms\. No watermarks\. No duplicate people\. No malformed hands or fingers\. Thai typography must be crisp, legible, and correctly spelled\. Avoid repeated text and distorted characters\./,
-  );
-  assert.match(
-    script,
-    /Professional Print Quality \/ Luxury Government Report \/ Realistic Skin Texture  \/ Sharp Focus \/ High-end Editorial Design/,
-  );
+test("Master Prompt emits one consolidated quality block and one negative block", () => {
+  const buildStart = script.indexOf("function buildPrompt");
+  const buildEnd = script.indexOf("function renderPrompt", buildStart);
+  const buildFunction = script.slice(buildStart, buildEnd);
+  assert.equal(buildFunction.split("${VISUAL_QUALITY_BLOCK}").length - 1, 1);
+  assert.equal(buildFunction.split("${NEGATIVE_PROMPT_BLOCK}").length - 1, 1);
+  assert.doesNotMatch(buildFunction, /Style Standards:/);
+  assert.doesNotMatch(buildFunction, /Mandatory Quality Directive:/);
+  assert.doesNotMatch(buildFunction, /NEGATIVE PROMPT:/);
 });
 
 test("Master Prompt includes every requested visual quality and negative rule", () => {
@@ -108,45 +108,62 @@ test("Master Prompt includes every requested visual quality and negative rule", 
     "Modern Healthcare Dashboard",
     "Luxury Blue Gold Theme",
     "Clean Professional Design",
-    "Sharp Typography",
+    "Sharp Typography and Focus",
     "Perfect Alignment",
     "Symmetrical Layout",
     "Balanced Composition",
     "HDR Lighting",
     "Cinematic Depth of Field",
-    "Realistic Light and Shadow Rendering",
+    "Realistic Light, Shadow, Skin, and Fabric Rendering",
     "Professional Photoshop Composite",
     "3D Data Visualization",
     "Glassmorphism Dashboard",
     "High Contrast",
-    "Editorial Quality",
+    "High-end Editorial Quality",
     "No AI Generated Look",
-    "Print Ready",
+    "Print Ready at Professional Print Quality",
   ];
   const negativeRules = [
     "Negative Prompt:",
     "distorted Thai characters",
     "misspelled words",
-    "missing Thai tone marks",
-    "missing Thai vowels",
+    "missing Thai tone marks or vowels",
     "broken or malformed glyphs",
     "scattered or fragmented text",
     "unreadable or illegible typography",
+    "obscured key information",
     "long paragraphs",
     "added quotations",
-    "added slogans",
-    "fabricated or unprovided information",
+    "slogans",
+    "extra taglines or unauthorized text",
+    "hallucinated, fabricated, or unprovided information",
     "fashion imagery",
     "idols",
     "unrelated people",
+    "altered faces",
+    "distorted uniforms",
+    "duplicate people",
+    "malformed hands or fingers",
     "overly sweet or informal visual tone",
     "excessive colors",
+    "mismatched palettes",
+    "poor contrast",
     "maps overlapping charts",
     "charts overlapping text",
+    "fake charts",
+    "deformed maps",
+    "blurred numbers",
     "cluttered composition",
     "low-quality icons",
     "excessive lens flare",
-    "poor readability of important information",
+    "watermarks",
+    "signatures",
+    "extra logos",
+    "random lettering",
+    "low resolution",
+    "visual noise",
+    "grain or compression artifacts",
+    "uncontrolled gradients",
   ];
   for (const rule of [...visualQualityRules, ...negativeRules]) {
     assert.ok(script.includes(rule), `missing prompt rule: ${rule}`);

@@ -470,22 +470,22 @@ Premium Government Banner
 Modern Healthcare Dashboard
 Luxury Blue Gold Theme
 Clean Professional Design
-Sharp Typography
+Sharp Typography and Focus
 Perfect Alignment
 Symmetrical Layout
 Balanced Composition
 HDR Lighting
 Cinematic Depth of Field
-Realistic Light and Shadow Rendering
+Realistic Light, Shadow, Skin, and Fabric Rendering
 Professional Photoshop Composite
 3D Data Visualization
 Glassmorphism Dashboard
 High Contrast
-Editorial Quality
+High-end Editorial Quality
 No AI Generated Look
-Print Ready`;
+Print Ready at Professional Print Quality`;
 
-  const NEGATIVE_PROMPT_BLOCK = "Negative Prompt: distorted Thai characters, misspelled words, missing Thai tone marks, missing Thai vowels, broken or malformed glyphs, scattered or fragmented text, unreadable or illegible typography, long paragraphs, added quotations, added slogans, fabricated or unprovided information, fashion imagery, idols, unrelated people, overly sweet or informal visual tone, excessive colors, maps overlapping charts, charts overlapping text, cluttered composition, low-quality icons, excessive lens flare, poor readability of important information";
+  const NEGATIVE_PROMPT_BLOCK = "Negative Prompt: distorted Thai characters, misspelled words, missing Thai tone marks or vowels, broken or malformed glyphs, scattered or fragmented text, unreadable or illegible typography, obscured key information, long paragraphs, added quotations, slogans, extra taglines or unauthorized text, hallucinated, fabricated, or unprovided information, fashion imagery, idols, unrelated people, altered faces, distorted uniforms, duplicate people, malformed hands or fingers, overly sweet or informal visual tone, excessive colors, mismatched palettes, poor contrast, maps overlapping charts, charts overlapping text, fake charts, deformed maps, blurred numbers, cluttered composition, low-quality icons, excessive lens flare, watermarks, signatures, extra logos, random lettering, low resolution, visual noise, grain or compression artifacts, uncontrolled gradients";
 
   const POPULAR = ["Luxury Emerald & Gold", "Medical Blue", "Royal Navy & Gold", "Violet AI"];
 
@@ -815,7 +815,7 @@ Print Ready`;
       constraints: "",
     };
     const content = state.content.trim() || "Topic and content as specified by the user";
-    const artStyle = state.artStyle || "Ultra-Realistic editorial rendering";
+    const artStyle = state.artStyle || "premium editorial rendering";
     const background = state.backgroundPattern || "None — clean flat background";
     const metallicLine = state.includeMetallic
       ? `Use metallic reflections only when they align with this theme; use the palette accent ${c.metallic} sparingly.`
@@ -842,10 +842,10 @@ Render the image from this topic and content. Strictly preserve every original t
 ${typeGuidance.configuration}
 
 [03] DESIGN CONCEPT
-Style: Masterpiece infographic design blending Premium Thai Educational Report, Luxury Academic Cover, and Elegant Government Report.
+Style: Masterpiece infographic design for premium Thai educational and official publications.
 Aesthetics: Luxurious, majestic, vibrant, official, modern, and clean.
 Mood: Dynamically adapt to the selected COLOR THEME while maintaining the identity of high-end academic media and top-tier official reports.
-Quality Standard: High-End Editorial Design, Professional Magazine Quality, Premium Visual Communication.
+Quality Standard: Apply the consolidated Visual Quality requirements in section [06].
 ART STYLE: ${artStyle}.
 ${islamicStyleGuidance.configuration}
 ${islamicStyleGuidance.visualDirection}
@@ -865,15 +865,8 @@ Contrast: Maintain optimal contrast between text and background colors for effor
 Quality Control: Zero text artifacts, non-distorted characters, no text overlap, no duplicated phrases, and no spelling errors.
 
 [06] LIGHTING & RENDER QUALITY
-Visual Style: Ultra-Realistic, Masterpiece Quality, Highly Detailed, Cinematic Lighting, rendered consistently as ${artStyle}.
-Textures & Finish: Realistic material textures, natural depth of field, sharp focus, and a premium editorial finish.
-Resolution Feel: 8K-class detail designed for premium high-end print media.
-Lighting Logic: Lighting and reflections must strictly react to and match the selected COLOR THEME.
-Style Standards: ${STYLE_TAGS.join(" / ")}.
-Mandatory Quality Directive:
-Balanced composition, sharp imagery, realistic lighting and shadows, and correct, legible Thai text. Do not add taglines or any other text. Do not alter faces. Do not distort uniforms. No watermarks. No duplicate people. No malformed hands or fingers. Thai typography must be crisp, legible, and correctly spelled. Avoid repeated text and distorted characters.
-Professional Print Quality / Luxury Government Report / Realistic Skin Texture  / Sharp Focus / High-end Editorial Design
-
+Rendering Direction: Apply ${artStyle} consistently across every subject and visual element.
+Theme-linked Lighting: Lighting and reflections must strictly react to and match the selected COLOR THEME.
 ${VISUAL_QUALITY_BLOCK}
 
 ${NEGATIVE_PROMPT_BLOCK}
@@ -882,10 +875,10 @@ ${NEGATIVE_PROMPT_BLOCK}
 ASPECT RATIO: ${state.aspectRatio}.
 ${ratioGuidance.configuration}
 ${ratioGuidance.output}
-Target Resolution: 7680 × 4320 px for the default 16:9 format; preserve equivalent 8K-class detail when another format is selected.
+Target Resolution: 7680 × 4320 px for the default 16:9 format; preserve equivalent pixel density when another format is selected.
 Print Specification: Prepare the layout at 300 DPI for high-quality printing where applicable.
 Framing: Maintain safe margins for all text and edge elements.
-Final Deliverable: Clean layout, 100% accurate text, no watermarks, no signatures, and no visual noise.
+Final Deliverable: Export the completed composition exactly as specified.
 Deliverable-specific constraints: ${typeGuidance.constraints}
 ${islamicStyleGuidance.constraints}
 
@@ -893,9 +886,7 @@ ${islamicStyleGuidance.constraints}
 Every visual element in the frame must reference the single COLOR THEME defined in section [01].
 If the COLOR THEME changes, update the entire color scheme across the image automatically.
 Do not retain legacy colors that clash with the newly selected theme.
-Prioritize aesthetic perfection, data accuracy, high readability, and ultimate visual cohesion.
-
-NEGATIVE PROMPT: Mismatched palettes, legacy colors, clutter, poor contrast, illegible or distorted Thai text, misspelled words, hallucinated data, fabricated values, duplicated phrases, text overlap, deformed anatomy, duplicate people, extra fingers, fake charts, deformed maps, blurred numbers, low resolution, visual noise, grain, compression artifacts, watermarks, signatures, extra logos, random lettering, and uncontrolled gradients.`;
+Prioritize aesthetic perfection, data accuracy, high readability, and ultimate visual cohesion.`;
   }
 
   function renderPrompt() {
