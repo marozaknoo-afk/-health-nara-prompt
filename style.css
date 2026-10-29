@@ -663,3 +663,90 @@ footer .brand-t {
     transform: none;
   }
 }
+
+/* ---------- my presets ---------- */
+:root { --warn: #b45309; --ok: #047857; }
+:root[data-theme="dark"] { --warn: #fbbf24; --ok: #34d399; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --warn: #fbbf24; --ok: #34d399; }
+}
+.my-presets { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-strong); }
+.my-presets h4 { margin: 0 0 8px; font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.my-presets .preset-actions:empty { display: none; }
+.my-preset { display: inline-flex; align-items: stretch; max-width: 100%; }
+.my-preset .preset-btn { border-radius: 999px 0 0 999px; border-right-width: 0; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.preset-del { min-width: 36px; min-height: 36px; border: 1px solid var(--line-strong); border-radius: 0 999px 999px 0; background: var(--surface); color: var(--muted); font-size: 16px; line-height: 1; }
+.preset-del:hover { border-color: var(--warn); color: var(--warn); }
+.preset-save { display: flex; gap: 8px; margin: 10px 0 6px; }
+.preset-save input { flex: 1; min-width: 0; height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line-strong); background: var(--surface); font-size: 16px; }
+.preset-save input:focus { outline: none; border-color: var(--focus); box-shadow: 0 0 0 4px var(--focus-soft); }
+.preset-save .btn { height: 40px; }
+
+/* ---------- pre-copy checks ---------- */
+.quality { margin: 0 0 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.quality h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
+.quality ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.quality li { display: flex; gap: 10px; align-items: baseline; padding-left: 10px; border-left: 3px solid var(--line-strong); font-size: 13px; line-height: 1.5; }
+.quality li strong { flex: none; min-width: 4.6em; font-size: 12px; font-weight: 700; color: var(--muted); }
+.quality li[data-level="warn"] { border-left-color: var(--warn); }
+.quality li[data-level="warn"] strong { color: var(--warn); }
+.quality li[data-level="ok"] { border-left-color: var(--ok); }
+.quality li[data-level="ok"] strong { color: var(--ok); }
+
+/* ---------- target picker ---------- */
+.target-picker { margin: 0 0 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface-2); }
+.target-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+.target-label { flex: none; min-width: 7.5em; font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.seg { display: inline-flex; flex-wrap: wrap; gap: 4px; padding: 3px; border: 1px solid var(--line-strong); border-radius: 12px; background: var(--surface); }
+.seg label { position: relative; display: block; }
+.seg input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.seg span { display: grid; place-items: center; min-height: 34px; padding: 0 14px; border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--ink-2); white-space: nowrap; transition: background .15s, color .15s; }
+.seg input:hover + span { background: var(--surface-2); }
+.seg input:checked + span { background: var(--btn-bg); color: var(--btn-ink); }
+.seg input:focus-visible + span { outline: 2px solid var(--focus); outline-offset: 2px; }
+.seg input:disabled { cursor: not-allowed; }
+.seg input:disabled + span { opacity: .55; }
+.target-picker .field-hint { margin: 4px 0 0; min-height: 0; }
+.target-notes { margin: 4px 0 0; padding-left: 18px; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.target-notes:empty { display: none; }
+
+/* ---------- negative prompt + stats ---------- */
+.negative-wrap { margin-top: 12px; }
+.negative-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.negative-head label { font-size: 12.5px; font-weight: 600; color: var(--ink-2); }
+.negative-output { min-height: 0; }
+.prompt-stats { margin: 6px 0 0; min-height: 0; font-family: var(--font-mono); }
+
+@media (max-width: 640px) {
+  .target-label { min-width: 0; width: 100%; }
+  .seg { width: 100%; }
+  .seg label { flex: 1 1 auto; }
+  .preset-save { flex-direction: column; }
+  .preset-save .btn { width: 100%; }
+}
+@media (pointer: coarse) {
+  .seg span { min-height: 44px; }
+  .preset-del, .my-preset .preset-btn { min-height: 44px; }
+  .preset-save input, .preset-save .btn { min-height: 44px; }
+}
+
+/* ---------- Thai typography controls ---------- */
+fieldset.field { min-width: 0; margin: 0 0 14px; padding: 0; border: 0; }
+fieldset.field legend { padding: 0; margin-bottom: 6px; font-size: 13px; font-weight: 600; }
+.radio-field { display: flex; align-items: flex-start; gap: 8px; min-height: 32px; font-size: 13px; font-weight: 500; cursor: pointer; }
+.radio-field input { flex: none; width: 22px; height: 22px; margin: 1px 0 0; accent-color: var(--btn-bg); }
+.radio-field em { font-style: normal; font-weight: 700; color: var(--ok); }
+.typography-row .field-hint { min-height: 0; }
+.text-panel { margin: 0 0 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+.text-panel[hidden] { display: none; }
+.text-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.text-panel h3 { margin: 0; font-size: 13px; font-weight: 600; }
+.text-panel .field-hint { margin: 4px 0 8px; min-height: 0; }
+.text-panel ol { margin: 0; padding-left: 22px; display: grid; gap: 4px; max-height: 240px; overflow: auto; font-size: 14px; line-height: 1.6; }
+.text-panel li label { display: flex; align-items: flex-start; gap: 8px; cursor: pointer; }
+.text-panel li input { flex: none; width: 20px; height: 20px; margin-top: 3px; accent-color: var(--btn-bg); }
+.text-panel li span { overflow-wrap: anywhere; }
+@media (pointer: coarse) {
+  .radio-field { min-height: 44px; align-items: center; }
+  .text-panel li label { min-height: 36px; }
+}

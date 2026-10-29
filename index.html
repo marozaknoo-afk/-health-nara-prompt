@@ -125,6 +125,22 @@
               <button type="button" class="preset-btn" data-preset="emergency-alert">ประกาศเตือนภัย</button>
               <button type="button" class="preset-btn" data-preset="annual-report">ปกรายงาน</button>
               <button type="button" class="preset-btn" data-preset="kpi-dashboard">Dashboard KPI</button>
+              <button type="button" class="preset-btn" data-preset="certificate">เกียรติบัตร</button>
+              <button type="button" class="preset-btn" data-preset="infographic">อินโฟกราฟิก</button>
+              <button type="button" class="preset-btn" data-preset="roll-up">โรลอัป</button>
+              <button type="button" class="preset-btn" data-preset="slide">สไลด์นำเสนอ</button>
+              <button type="button" class="preset-btn" data-preset="step-guide">คู่มือเป็นขั้นตอน</button>
+              <button type="button" class="preset-btn" data-preset="social-post">โพสต์โซเชียล</button>
+            </div>
+            <div class="my-presets">
+              <h4>ชุดของฉัน</h4>
+              <div class="preset-actions" id="myPresets" role="group" aria-label="ชุดตั้งค่าที่บันทึกไว้"></div>
+              <form class="preset-save" id="savePresetForm" autocomplete="off">
+                <label class="sr-only" for="presetName">ชื่อชุดตั้งค่า</label>
+                <input id="presetName" type="text" maxlength="40" placeholder="ตั้งชื่อชุด เช่น โปสเตอร์ควบคุมโรค" />
+                <button type="submit" class="btn sm">บันทึกค่าปัจจุบัน</button>
+              </form>
+              <small class="field-hint" id="myPresetStatus" role="status" aria-live="polite">บันทึกเฉพาะการตั้งค่า (พาเลต ประเภท อัตราส่วน สไตล์ เครื่องมือปลายทาง) ไม่รวมเนื้อหา</small>
             </div>
           </section>
 
@@ -243,6 +259,20 @@
             </select>
           </label>
 
+          <div class="field-row typography-row">
+            <label class="field">
+              <span>THAI_FONT — แบบอักษรไทยในภาพ</span>
+              <select id="fontStyle" aria-describedby="fontStyleHint"></select>
+              <small id="fontStyleHint" class="field-hint" role="status" aria-live="polite"></small>
+            </label>
+            <fieldset class="field text-mode" aria-describedby="textModeHint">
+              <legend>TEXT_MODE — ข้อความไทยในภาพ</legend>
+              <label class="radio-field"><input type="radio" name="textMode" value="render" checked /><span>ให้ AI เขียนข้อความไทยในภาพ</span></label>
+              <label class="radio-field"><input type="radio" name="textMode" value="reserve" /><span>เว้นพื้นที่ว่าง แล้ววางข้อความเอง <em>(ถูกต้อง 100%)</em></span></label>
+              <small id="textModeHint" class="field-hint" role="status" aria-live="polite"></small>
+            </fieldset>
+          </div>
+
           <div class="field-row">
             <label class="checkbox-field">
               <input type="checkbox" id="includePeople" checked />
@@ -294,11 +324,53 @@
         <div><div class="kick">Master Prompt</div><h2 id="outputHeading">พร้อมคัดลอกใช้งาน</h2></div>
         <div class="output-actions">
           <button id="copyBtn" type="button" class="btn dark"><svg class="i"><use href="#i-copy"/></svg>คัดลอก</button>
+          <button id="shareBtn" type="button" class="btn sm"><svg class="i"><use href="#i-arrow"/></svg>คัดลอกลิงก์แชร์</button>
           <button id="exportJsonBtn" type="button" class="btn sm"><svg class="i"><use href="#i-down"/></svg>Export JSON</button>
+          <button id="importBtn" type="button" class="btn sm"><svg class="i"><use href="#i-pen"/></svg>นำเข้า JSON</button>
+          <input type="file" id="importInput" accept=".json,application/json" hidden />
           <button id="exportCssBtn" type="button" class="btn sm"><svg class="i"><use href="#i-down"/></svg>Export CSS</button>
         </div>
       </div>
+
+      <section class="quality" aria-labelledby="qualityTitle">
+        <h3 id="qualityTitle">ตรวจก่อนคัดลอก</h3>
+        <ul id="qualityList"></ul>
+      </section>
+
+      <div class="target-picker" role="group" aria-labelledby="targetLabel">
+        <div class="target-row">
+          <span class="target-label" id="targetLabel">เครื่องมือปลายทาง</span>
+          <div class="seg" id="targetOptions"></div>
+        </div>
+        <div class="target-row">
+          <span class="target-label" id="lengthLabel">ความยาว</span>
+          <div class="seg" role="radiogroup" aria-labelledby="lengthLabel">
+            <label><input type="radio" name="promptLength" value="full" checked /><span>เต็มรูปแบบ</span></label>
+            <label><input type="radio" name="promptLength" value="compact" /><span>กระชับ</span></label>
+          </div>
+        </div>
+        <p class="field-hint" id="targetSummary" role="status" aria-live="polite"></p>
+        <ul class="target-notes" id="targetNotes"></ul>
+      </div>
+
+      <section class="text-panel" id="textPanel" aria-labelledby="textPanelTitle" hidden>
+        <div class="text-panel-head">
+          <h3 id="textPanelTitle">รายการข้อความ</h3>
+          <button id="copyTextItemsBtn" type="button" class="btn sm"><svg class="i"><use href="#i-copy"/></svg>คัดลอกข้อความทั้งหมด</button>
+        </div>
+        <p class="field-hint" id="textPanelNote"></p>
+        <ol id="textPanelList"></ol>
+      </section>
+
       <textarea id="promptOutput" class="prompt-output" readonly aria-label="Master Prompt ที่สร้างขึ้น"></textarea>
+      <div id="negativeWrap" class="negative-wrap" hidden>
+        <div class="negative-head">
+          <label for="negativeOutput">Negative prompt (ใส่ในช่องแยกของเครื่องมือ)</label>
+          <button id="copyNegativeBtn" type="button" class="btn sm"><svg class="i"><use href="#i-copy"/></svg>คัดลอก Negative</button>
+        </div>
+        <textarea id="negativeOutput" class="prompt-output negative-output" readonly rows="5"></textarea>
+      </div>
+      <p id="promptStats" class="field-hint prompt-stats"></p>
       <p id="copyStatus" class="copy-status" role="status" aria-live="polite"></p>
     </section>
   </main>
@@ -321,11 +393,13 @@
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js" integrity="sha384-vtjasyidUo0kW94K5MXDXntzOJpQgBKXmE7e2Ga4LG0skTTLeBi97eFAXsqewJjw" crossorigin="anonymous" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js" integrity="sha384-/cXAMbzovUIKbBERjPmR3SnPTh8siWr5lsvFYj1Uq4XP0yaJUZJmsh0YXyGv5P0y" crossorigin="anonymous" defer></script>
   <script src="content-types.js"></script>
   <script src="aspect-ratios.js"></script>
   <script src="islamic-art-styles.js"></script>
+  <script src="thai-typography.js"></script>
+  <script src="prompt-tools.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

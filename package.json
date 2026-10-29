@@ -1,0 +1,11 @@
+{
+  "name": "health-nara-prompt-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Master Prompt generator for Thai public-health and government visuals (static site, no build step).",
+  "scripts": {
+    "test": "node --test",
+    "serve": "npx --yes http-server . -p 4173 -c-1"
+  },
+  "engines": { "node": ">=18" }
+}
