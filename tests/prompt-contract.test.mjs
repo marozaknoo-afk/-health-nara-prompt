@@ -195,7 +195,7 @@ test("responsive CSS covers narrow screens, safe areas, and touch targets", () =
 test("source-authentic colors are the default and migrate saved palette state", () => {
   assert.match(index, /id="sourceColorModeBtn"/);
   assert.match(index, /ไม่เลือกตามหมวดหมู่สี/);
-  assert.match(script, /const STATE_VERSION = 2/);
+  assert.match(script, /const STATE_VERSION = 3/);
   assert.match(script, /paletteId: SOURCE_COLOR_MODE_ID/);
   assert.match(script, /saved\.paletteId = SOURCE_COLOR_MODE_ID/);
   assert.match(script, /COLOR MODE: SOURCE-AUTHENTIC COLORS \(DEFAULT\)/);
@@ -204,4 +204,46 @@ test("source-authentic colors are the default and migrate saved palette state", 
   assert.match(script, /sourceColorMode \? "Source-Authentic Color Fidelity" : paletteQualityLabel/);
   assert.match(script, /Selected Palette Fidelity/);
   assert.match(script, /--hp-color-mode: source-authentic/);
+});
+
+
+test("content never persists in browser storage and old saved content is removed", () => {
+  const stateStorageStart = script.indexOf("function stateForStorage");
+  const stateStorageEnd = script.indexOf("function isSourceColorMode", stateStorageStart);
+  const storageFunctions = script.slice(stateStorageStart, stateStorageEnd);
+  assert.match(script, /const STATE_VERSION = 3/);
+  assert.match(storageFunctions, /const \{ content, \.\.\.storedState \} = state/);
+  assert.match(storageFunctions, /delete saved\.content/);
+  assert.match(storageFunctions, /if \(removedStoredContent\) \{\s+saveState\(\);\s+\}/);
+  assert.match(storageFunctions, /JSON\.stringify\(stateForStorage\(\)\)/);
+  assert.doesNotMatch(storageFunctions, /JSON\.stringify\(state\)/);
+});
+
+test("palette search has a safe empty state with a clear action", () => {
+  assert.match(index, /id="paletteEmptyState"/);
+  assert.match(index, /id="paletteEmptyQuery"/);
+  assert.match(index, /id="paletteEmptyClearBtn"/);
+  assert.match(script, /els\.emptyState\.hidden = list\.length !== 0 \|\| !query/);
+  assert.match(script, /els\.emptyQuery\.textContent = query/);
+  assert.match(script, /els\.emptyClearBtn\.addEventListener\("click", \(\) => setQuery\(""\)\)/);
+  assert.match(styles, /\.palette-empty \{/);
+});
+
+test("workflow presets use supported content types and ratios without replacing content", () => {
+  const presetStart = script.indexOf("const PRESETS");
+  const presetEnd = script.indexOf("const TONE_ROLES", presetStart);
+  const presetBlock = script.slice(presetStart, presetEnd);
+  const applyStart = script.indexOf("function applyPreset");
+  const applyEnd = script.indexOf("function renderPreview", applyStart);
+  const applyPresetFunction = script.slice(applyStart, applyEnd);
+  for (const preset of ["public-health-poster", "emergency-alert", "annual-report", "kpi-dashboard"]) {
+    assert.match(index, new RegExp(`data-preset="${preset}"`));
+    assert.match(presetBlock, new RegExp(`"${preset}"`));
+  }
+  assert.match(presetBlock, /contentType: "Public Health Poster"/);
+  assert.match(presetBlock, /aspectRatio: "4:5 \(Portrait Feed\)"/);
+  assert.match(presetBlock, /contentType: "Dashboard \/ Data Visual"/);
+  assert.match(presetBlock, /aspectRatio: "16:9 \(Widescreen\)"/);
+  assert.match(applyPresetFunction, /Object\.assign\(state, preset\)/);
+  assert.doesNotMatch(presetBlock, /content:/);
 });

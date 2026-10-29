@@ -203,6 +203,9 @@ img, svg { max-width: 100%; }
 .res-title .count { display: inline-flex; align-items: center; height: 26px; padding: 0 10px; border-radius: 999px; background: var(--surface-3); color: var(--muted); font-size: 12.5px; font-weight: 600; white-space: nowrap; }
 
 .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); gap: 14px; }
+.palette-empty { display: grid; justify-items: start; gap: 10px; padding: 20px; border: 1px dashed var(--line-strong); border-radius: var(--r-lg); background: var(--surface-2); color: var(--muted); }
+.palette-empty p { margin: 0; }
+.palette-empty strong { color: var(--ink); }
 .card.palette-card { position: relative; display: flex; flex-direction: column; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px 14px 12px; min-width: 0; cursor: pointer; text-align: left; transition: transform .18s, box-shadow .18s, background .18s; }
 .card.palette-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
 .card.palette-card[aria-selected="true"] { border: 1.5px solid transparent; background: linear-gradient(var(--surface), var(--surface)) padding-box, var(--grad) border-box; box-shadow: var(--shadow-lg); }
@@ -230,6 +233,11 @@ img, svg { max-width: 100%; }
 .formula li strong { font-weight: 600; font-size: 14px; }
 .formula li span { color: var(--muted); font-size: 13px; }
 
+.presets { margin: 18px 0 16px; padding: 14px; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface-2); }
+.presets h3 { margin: 0 0 10px; font-size: 13px; font-weight: 600; }
+.preset-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.preset-btn { min-height: 36px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 999px; background: var(--surface); color: var(--ink-2); font: inherit; font-size: 12px; font-weight: 600; cursor: pointer; transition: border-color .15s, background .15s, color .15s; }
+.preset-btn:hover { border-color: var(--focus); background: var(--focus-soft); color: var(--ink); }
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; font-size: 13px; font-weight: 600; }
 .field-hint { min-height: 1.35em; color: var(--muted); font-size: 11.5px; font-weight: 500; line-height: 1.35; }
 .field-hint[data-status="recommended"] { color: #1d4ed8; }

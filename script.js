@@ -21,7 +21,7 @@
     buildIslamicArtStyleGuidance,
   } = globalThis.HealthPromptIslamicArtStyles;
 
-  const STATE_VERSION = 2;
+  const STATE_VERSION = 3;
   const SOURCE_COLOR_MODE_ID = "source-authentic-colors";
   const SOURCE_COLOR_MODE = Object.freeze({
     id: SOURCE_COLOR_MODE_ID,
@@ -503,6 +503,40 @@ Print Ready at Professional Print Quality`;
   const NEGATIVE_PROMPT_BLOCK = "Negative Prompt: distorted Thai characters, misspelled words, missing Thai tone marks or vowels, broken or malformed glyphs, scattered or fragmented text, unreadable or illegible typography, obscured key information, long paragraphs, added quotations, slogans, extra taglines or unauthorized text, hallucinated, fabricated, or unprovided information, fashion imagery, idols, unrelated people, altered faces, distorted uniforms, duplicate people, malformed hands or fingers, overly sweet or informal visual tone, excessive colors, mismatched palettes, poor contrast, maps overlapping charts, charts overlapping text, fake charts, deformed maps, blurred numbers, cluttered composition, low-quality icons, excessive lens flare, watermarks, signatures, extra logos, blurred, distorted, pixelated, low-resolution, cropped, altered, or inaccurate Ministry of Public Health logo, random lettering, low resolution, visual noise, grain or compression artifacts, uncontrolled gradients";
 
   const POPULAR = ["Luxury Emerald & Gold", "Medical Blue", "Royal Navy & Gold", "Violet AI"];
+  const PRESETS = Object.freeze({
+    "public-health-poster": Object.freeze({
+      contentType: "Public Health Poster",
+      aspectRatio: "4:5 (Portrait Feed)",
+      backgroundPattern: "Geometric Line Pattern",
+      artStyle: "Flat Illustration / Vector Art",
+      includePeople: true,
+      includeMetallic: false,
+    }),
+    "emergency-alert": Object.freeze({
+      contentType: "Emergency Alert / Disease Advisory",
+      aspectRatio: "1:1 (Square Social)",
+      backgroundPattern: "",
+      artStyle: "",
+      includePeople: false,
+      includeMetallic: false,
+    }),
+    "annual-report": Object.freeze({
+      contentType: "Annual Report Cover",
+      aspectRatio: "A4 Portrait (210:297)",
+      backgroundPattern: "",
+      artStyle: "Photorealistic",
+      includePeople: true,
+      includeMetallic: true,
+    }),
+    "kpi-dashboard": Object.freeze({
+      contentType: "Dashboard / Data Visual",
+      aspectRatio: "16:9 (Widescreen)",
+      backgroundPattern: "Subtle Grid Texture",
+      artStyle: "3D Render",
+      includePeople: false,
+      includeMetallic: false,
+    }),
+  });
 
   const TONE_ROLES = ["primary", "secondary", "tertiary", "metallic"];
   const TONE_ROLE_LABELS = { primary: "Primary", secondary: "Secondary", tertiary: "Tertiary", metallic: "Metallic/Accent" };
@@ -524,6 +558,9 @@ Print Ready at Professional Print Quality`;
     pills: document.getElementById("pills"),
     resCount: document.getElementById("resCount"),
     grid: document.getElementById("paletteGrid"),
+    emptyState: document.getElementById("paletteEmptyState"),
+    emptyQuery: document.getElementById("paletteEmptyQuery"),
+    emptyClearBtn: document.getElementById("paletteEmptyClearBtn"),
     sourceColorModeBtn: document.getElementById("sourceColorModeBtn"),
     toneRamp: document.getElementById("toneRamp"),
     toneRampPaletteName: document.getElementById("toneRampPaletteName"),
@@ -573,9 +610,19 @@ Print Ready at Professional Print Quality`;
     includeMetallic: true,
   };
 
+  function stateForStorage() {
+    const { content, ...storedState } = state;
+    return storedState;
+  }
+
   function loadState() {
+    let removedStoredContent = false;
     try {
       const saved = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+      if (Object.prototype.hasOwnProperty.call(saved, "content")) {
+        delete saved.content;
+        removedStoredContent = true;
+      }
       if (saved.stateVersion !== STATE_VERSION) {
         saved.stateVersion = STATE_VERSION;
         saved.paletteId = SOURCE_COLOR_MODE_ID;
@@ -589,10 +636,13 @@ Print Ready at Professional Print Quality`;
       state.paletteId = SOURCE_COLOR_MODE_ID;
       state.toneIndex = null;
     }
+    if (removedStoredContent) {
+      saveState();
+    }
   }
 
   function saveState() {
-    try { localStorage.setItem(LS_KEY, JSON.stringify(state)); } catch (_) { /* storage unavailable */ }
+    try { localStorage.setItem(LS_KEY, JSON.stringify(stateForStorage())); } catch (_) { /* storage unavailable */ }
   }
 
   function isSourceColorMode() {
@@ -685,7 +735,10 @@ Print Ready at Professional Print Quality`;
 
   function renderGrid() {
     const list = filteredPalettes();
+    const query = state.query.trim();
     els.resCount.textContent = `${list.length} พาเลต`;
+    els.emptyState.hidden = list.length !== 0 || !query;
+    els.emptyQuery.textContent = query;
     els.grid.innerHTML = "";
     list.forEach((p) => {
       const card = document.createElement("button");
@@ -850,6 +903,17 @@ Print Ready at Professional Print Quality`;
     renderGrid();
     saveState();
     document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function applyPreset(id) {
+    const preset = PRESETS[id];
+    if (!preset) return;
+    Object.assign(state, preset);
+    restoreFormFromState();
+    renderAspectRatioHint();
+    renderPreview();
+    renderPrompt();
+    saveState();
   }
 
   function renderPreview() {
@@ -1200,6 +1264,10 @@ ${colorConsistency}`;
       });
     });
     els.qClear.addEventListener("click", () => setQuery(""));
+    els.emptyClearBtn.addEventListener("click", () => setQuery(""));
+    document.querySelectorAll("[data-preset]").forEach((btn) => {
+      btn.addEventListener("click", () => applyPreset(btn.dataset.preset));
+    });
     els.sourceColorModeBtn.addEventListener("click", setSourceColorMode);
 
     els.content.addEventListener("input", (e) => {

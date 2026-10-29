@@ -101,6 +101,10 @@
         <div class="res-title"><h2 id="resTitle">พาเลตสีทั้งหมด</h2><span class="count" id="resCount"></span></div>
       </div>
       <div class="grid" id="paletteGrid" role="listbox" aria-label="รายการพาเลตสี"></div>
+      <div class="palette-empty" id="paletteEmptyState" role="status" aria-live="polite" hidden>
+        <p>ไม่พบพาเลตที่ตรงกับ “<strong id="paletteEmptyQuery"></strong>”</p>
+        <button type="button" class="btn sm ghost" id="paletteEmptyClearBtn">ล้างคำค้นหา</button>
+      </div>
 
       <div class="tone-ramp-wrap">
         <h3>โทนสี 4 สีจริงของพาเลตที่เลือก <small id="toneRampPaletteName"></small></h3>
@@ -113,6 +117,16 @@
         <div>
           <div class="kick">Content &amp; Format</div>
           <h2 id="configTitle">กำหนดเนื้อหา &amp; รูปแบบ</h2>
+
+          <section class="presets" aria-labelledby="presetTitle">
+            <h3 id="presetTitle">เริ่มจากงานที่ใช้บ่อย</h3>
+            <div class="preset-actions" role="group" aria-label="เลือก preset สำหรับงาน">
+              <button type="button" class="preset-btn" data-preset="public-health-poster">โปสเตอร์สุขภาพ</button>
+              <button type="button" class="preset-btn" data-preset="emergency-alert">ประกาศเตือนภัย</button>
+              <button type="button" class="preset-btn" data-preset="annual-report">ปกรายงาน</button>
+              <button type="button" class="preset-btn" data-preset="kpi-dashboard">Dashboard KPI</button>
+            </div>
+          </section>
 
           <label class="field">
             <span class="field-label-row">ใส่เนื้อหา CONTENT — หัวข้อ/เนื้อหาหลัก<span class="field-label-actions"><button type="button" class="btn sm ghost" id="attachFileBtn">แนบไฟล์</button><button type="button" class="btn sm ghost" id="clearContentBtn">ล้างข้อความ</button></span></span>
